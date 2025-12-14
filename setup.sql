@@ -1,0 +1,4 @@
+
+CREATE TABLE groupes( id_groupe INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(20) NOT NULL);
+CREATE TABLE membre( id_groupe INT , FOREIGN KEY (id_groupe) REFERENCES groupes(id_groupe) ON DELETE CASCADE, id_user INT, FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE, PRIMARY KEY (id_groupe,id_user)); 
+CREATE TABLE message( id_groupe INT , FOREIGN KEY (id_groupe) REFERENCES groupes(id_groupe) ON DELETE CASCADE, id_user INT, FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE, id_message INT PRIMARY KEY AUTO_INCREMENT, content VARCHAR(255) NOT NULL,send_time DATETIME DEFAULT CURRENT_TIMESTAMP); 
