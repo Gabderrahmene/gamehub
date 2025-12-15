@@ -20,22 +20,64 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Click
  */
 public class add extends javax.swing.JFrame {
+
     private BufferedReader bf;
     private PrintWriter pw;
     private String id_user;
     private String ids;
     private JList<User> userList;
-    
+    private final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
+
     public add() throws IOException {
+
         initComponents();
-        Dimension screenSize,frameSize;
+        // Create table model
+        // Create table model for time slots
+         DefaultTableModel model = new DefaultTableModel(new String[]{""}, 0);
+
+    // Add each time slot as a row
+    for (String value : timeSlots) {
+        model.addRow(new Object[]{value});
+    }
+
+    // Create table
+    JTable table = new JTable(model);
+
+    // Hide the header
+    table.setTableHeader(null);
+
+    // Add mouse listener BEFORE adding to scroll pane
+    table.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                try {
+                    String selectedValue = (String) table.getValueAt(selectedRow, 0);
+                    System.out.println("Selected time slot: " + selectedValue);
+                    String po = new ClientHandle(User.bf,User.pw).get_posts(selectedValue);
+                    
+                    // Or show in a dialog to test
+                } catch (IOException ex) {
+                    System.getLogger(add.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                }
+            }
+        }
+
+        });
+
+        jScrollPane1.setViewportView(table);
+    
+    Dimension screenSize,frameSize;
     int x,y;
     screenSize=Toolkit.getDefaultToolkit().getScreenSize();
     frameSize=getSize();
@@ -43,44 +85,40 @@ public class add extends javax.swing.JFrame {
     y=(screenSize.height-frameSize.height)/2;
     setLocation(x, y);
 
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        DefaultListModel<User> users = new DefaultListModel<>();
-     
-     
-        userList = new JList<>(users);
-        userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        userList.setFixedCellHeight(36);
-        userList.setCellRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                          int index, boolean isSelected,
-                                                          boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof User) {
-                    User u = (User) value;
-                   
-                }
-                return this;
-            }
-            
-            
-        });
+    JPanel listPanel = new JPanel();
+    listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+    listPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+    DefaultListModel<User> users = new DefaultListModel<>();
+ 
+    
+    userList = new JList<>(users);
+    userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    userList.setFixedCellHeight(36);
+    userList.setCellRenderer(new DefaultListCellRenderer() {
+        @Override
         
-        jScrollPane1.setViewportView(userList);
-        userList.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                      int index, boolean isSelected,
+                                                      boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof User) {
+                User u = (User) value;
+               
+            }
+            return this;
+        }
+        });
+    jScrollPane3.setViewportView(userList);
+    
+    userList.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
 
-                if (evt.getClickCount() == 1) {
-                   
-                }
-                    }
-                    
-                
-            });
-
+            if (evt.getClickCount() == 1) {
+               
+            }
+        }
+    });
     }
 
     /**
@@ -127,6 +165,7 @@ public class add extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel2.setText("reservation :");
 
+        date.setToolTipText("");
         jScrollPane1.setViewportView(date);
 
         jScrollPane3.setViewportView(posts);
@@ -162,18 +201,18 @@ public class add extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(confirm)
                     .addComponent(cancel))
                 .addGap(28, 28, 28))
@@ -184,7 +223,7 @@ public class add extends javax.swing.JFrame {
 
     private void confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmActionPerformed
 
-     dispose();
+        dispose();
     }//GEN-LAST:event_confirmActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed

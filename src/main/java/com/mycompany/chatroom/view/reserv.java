@@ -111,11 +111,7 @@ public class reserv extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        try {
-            new add().setVisible(true);
-        } catch (IOException ex) {
-            System.getLogger(reserv.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+        new add_().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
