@@ -33,7 +33,7 @@ public class add_ extends javax.swing.JFrame {
     private String ids;
     private JList<User> userList;
     private final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
-   
+    public String hor;
 
     /**
      * Creates new form add_
@@ -60,8 +60,10 @@ public class add_ extends javax.swing.JFrame {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     try {
+                        
                         String selectedValue = (String) table.getValueAt(selectedRow, 0);
                         System.out.println("Selected time slot: " + selectedValue);
+                        hor=selectedValue;
                         String po = new ClientHandle(User.bf, User.pw).get_posts(selectedValue);
                         
                         
@@ -110,7 +112,7 @@ public class add_ extends javax.swing.JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 1) {
-
+                   
                 }
             }
         });
@@ -260,7 +262,11 @@ public class add_ extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmActionPerformed
-
+        try {
+            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+month.getSelectedItem()+"-"+day.getSelectedItem()+" "+hor);
+        } catch (IOException ex) {
+            System.getLogger(add_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
         dispose();
     }//GEN-LAST:event_confirmActionPerformed
 
@@ -269,7 +275,15 @@ public class add_ extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
-
+        if(month.getSelectedItem()!="February"){
+            day.addItem("29");
+            day.addItem("30");
+        }else{
+            day.removeItem("29");
+            day.removeItem("30");
+        }
+        
+                
     }//GEN-LAST:event_monthActionPerformed
 
     private void dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayActionPerformed
