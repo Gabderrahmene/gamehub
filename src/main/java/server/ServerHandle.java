@@ -5,6 +5,7 @@
 package server;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -194,14 +195,36 @@ public class ServerHandle {
             System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             return "-1";
         }}
-        public String get_reserv(String date){
+        public String get_reserv(){
+        try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
+            // create a Statement"SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";"
+            try (Statement stmt = conn.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery("SELECT c.username,  p.post_name, r.date FROM reserv r INNER JOIN client c ON r.id_user = c.id_user INNER JOIN post p ON r.id_post = p.id_post;" )) {
+                    String res = "";
+                    while (rs.next()) {
+                        res+=rs.getString("username")+","+rs.getString("post_name")+","+rs.getString("date")+":";
+                }
+                    return res;
+                } catch (SQLException ex) {
+                    System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    return "-1";
+                }
+            } catch (SQLException ex) {
+                System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                return "-1";
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            return "-1";
+        }}
+        public String get_posts(String date){
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
                 try (ResultSet rs = stmt.executeQuery("SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";" )) {
                     String res = "";
                     while (rs.next()) {
-                        res+=rs.getString("id_user")+","+rs.getString("username")+","+rs.getString("content")+":";
+                        res+=rs.getString("post_name")+",";
                 }
                     return res;
                 } catch (SQLException ex) {
@@ -288,7 +311,7 @@ public class ServerHandle {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("UPDATE reserv" +"SET post = "+post+", date= "+ date+"WHERE CustomerID = "+id_reserv+";" )) {
+                try (ResultSet rs = stmt.executeQuery("UPDATE reserv SET post = "+post+", date= "+ date+"WHERE id_reserv = "+id_reserv+";" )) {
                     String res = "";
                     while (rs.next()) {
                         res+=rs.getString("id_user")+","+rs.getString("username")+","+rs.getString("content")+":";

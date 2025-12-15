@@ -83,14 +83,11 @@ public class Server extends Thread {
                         pw.println(text);
                     }
                 case "get_reserv" ->                     {
-                        String text = handle.get_users();
                         pw.println("listen_users");  
-                        pw.println(text);
                     }
-                case "get_messages" ->                     {
-                        String id_groupe = bf.readLine();
-                        String text = handle.get_messages(id_groupe);
-                        pw.println("listen_messages");  
+                case "get_posts" ->                     {
+                     String date = bf.readLine();
+                        String text = handle.get_posts(date);  
                         pw.println(text);
                     }
                  case "add_group" ->                     {
