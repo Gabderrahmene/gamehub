@@ -5,30 +5,21 @@
 package gamehub.models;
 
 import java.io.Serializable;
-
+import java.io.PrintWriter;
+import java.io.BufferedReader;
 /**
  *
  * @author abdou
  */
 public class User {
-    private String id;
     private String username;
-    public User (String id , String username ){
-       this.id=id;
+    public static BufferedReader bf;
+    public static PrintWriter pw;
+    public User (String username ,PrintWriter pw,BufferedReader bf){
        this.username=username;
+       this.bf=bf;
+       this.pw=pw;
     }
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }

@@ -11,11 +11,6 @@
         <exec.mainClass>com.mycompany.chatroom.Chatroom</exec.mainClass>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20250517</version>
-        </dependency>
         <dependency> 
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>

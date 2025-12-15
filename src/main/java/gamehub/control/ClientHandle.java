@@ -65,8 +65,10 @@ public class ClientHandle {
         }
         return "-1";
     }
-    public void get_posts(){
+    public String get_posts(String date) throws IOException{
         pw.println("get_posts");
+        pw.println(date);
+        return bf.readLine();
     }
     public String listen(){
         try {
