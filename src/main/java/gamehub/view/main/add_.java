@@ -64,9 +64,12 @@ public class add_ extends javax.swing.JFrame {
                         String selectedValue = (String) table.getValueAt(selectedRow, 0);
                         System.out.println("Selected time slot: " + selectedValue);
                         hor=selectedValue;
-                        String po = new ClientHandle(User.bf, User.pw).get_posts(selectedValue);
-                        
-                        
+                        String[] parts = hor.split("-");
+                String startTime = parts[0];
+                System.out.print(year.getSelectedItem()+"-"+month.getSelectedIndex()+"-"+day.getSelectedItem()+" "+startTime+":00");
+                int ind=month.getSelectedIndex()+1;
+            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+(ind)+"-"+day.getSelectedItem()+" "+startTime+":00");
+                        System.out.print(po);
                     } catch (IOException ex) {
                         logger.log(java.util.logging.Level.SEVERE, null, ex);
                     }
@@ -252,7 +255,9 @@ public class add_ extends javax.swing.JFrame {
 
     private void confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmActionPerformed
         try {
-            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+month.getSelectedItem()+"-"+day.getSelectedItem()+" "+hor);
+            String[] parts = hor.split("-");
+            String startTime = parts[0];
+            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+month.getSelectedItem()+"-"+day.getSelectedItem()+" "+startTime);
         } catch (IOException ex) {
             System.getLogger(add_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
