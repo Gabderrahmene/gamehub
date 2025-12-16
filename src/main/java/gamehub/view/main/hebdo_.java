@@ -5,6 +5,8 @@
 package gamehub.view.main;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.view.mensuel.JourCellule;
+import gamehub.view.mensuel.eventLabel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  *
@@ -23,7 +27,8 @@ import java.time.format.DateTimeFormatter;
 public class hebdo_ extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(hebdo_.class.getName());
       private final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-    private final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
+    public final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
+     private  JPanel gridPanel;
     private JButton backwardButton;
 private JButton nextButton;
     // List to hold all the JPanels in the grid for easy access/looping
@@ -59,7 +64,7 @@ private JButton nextButton;
         topHeaderContainer.add(headerPanel, BorderLayout.CENTER);
 
         // 6. Create main panel with all components
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel  mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topHeaderContainer, BorderLayout.NORTH);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
         mainPanel.add(createNavigationPanel(), BorderLayout.SOUTH);
@@ -132,7 +137,7 @@ private JButton nextButton;
      * All cells are stored in the 'scheduleCells' list.
      */
     private JPanel createScheduleGrid() {
-        JPanel gridPanel = new JPanel(new GridLayout(timeSlots.length, days.length));
+         gridPanel = new JPanel(new GridLayout(timeSlots.length, days.length));
         scheduleCells = new ArrayList<>();
         
         int rows = timeSlots.length;
@@ -168,20 +173,54 @@ private JButton nextButton;
     
     
     }
-     private void revrvs(String date1){
-    String tt = new ClientHandle(User.bf, User.pw).get_reserv_wek(User.username,date1);
-String[] reservations = tt.split("/");
-
-
-for (String reservation : reservations) {
-    reservation = reservation.trim(); 
-    String[] parts = reservation.split(",");
-    String post = parts[0].trim(); 
-    String dateHeure = parts[1].trim(); 
-    String[] dateTimeParts = dateHeure.split(" ");
-    String date = dateTimeParts[0];  
-    String heure = dateTimeParts[1]; 
-
+     private void reservs(String date1){
+     String tt = new ClientHandle(User.bf, User.pw).get_reserv_wek(User.username, date1);
+    String[] reservations = tt.split("/");
+    // Extract the day from date1 (format: yyyy-MM-dd)
+    String[] date1Parts = date1.split("-");
+    int date1Int = Integer.parseInt(date1Parts[2]); // Get the day part
+     for (int i = 0; i < gridPanel.getComponentCount(); i++) {
+        JPanel cell = (JPanel) gridPanel.getComponent(i);
+        // Remove all components from the cell
+        cell.removeAll();
+        cell.revalidate();
+        cell.repaint();
+    }
+    for (String reservation : reservations) {
+        try {
+            reservation = reservation.trim(); 
+            String[] parts = reservation.split(",");
+            String post = parts[0].trim(); 
+            String dateHeure = parts[1].trim(); 
+            String[] dateTimeParts = dateHeure.split(" ");
+            String date = dateTimeParts[0];
+            String[] part = date.split("-");
+            String day = part[2].trim();
+            String heure = dateTimeParts[1];
+            int dayInt = Integer.parseInt(day);
+           
+            int i = Arrays.asList(timeSlots).indexOf(heure);
+            
+            // Now you can do the arithmetic
+            int k = dayInt - date1Int;
+            
+            int place = ((i * 7) + k);
+            System.out.println(reservation); // Changed to println
+            System.out.println(i); 
+            System.out.println(dayInt); 
+            System.out.println(date1Int); 
+            JPanel aa = (JPanel)gridPanel.getComponent(place);
+            aa.add(new eventLabel(post));
+            aa.revalidate();
+            aa.repaint();
+            
+        } catch (Exception e) {
+            System.err.println("Error processing reservation: " + reservation);
+            e.printStackTrace();
+        }
+    
+    
+    
 }
      }
  private void handleNext() {
@@ -190,6 +229,7 @@ for (String reservation : reservations) {
     String formattedDate = futureDate.format(formatter);
     week.setText(Dat.format(formatter) + " -> " + formattedDate);
     Dat = futureDate.plusDays(1);
+    reservs(Dat.format(formatter));
 }
 
 private void handleBackward() {
@@ -197,6 +237,7 @@ private void handleBackward() {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     week.setText(pastDate + " -> " + Dat.minusDays(1));
     Dat = pastDate;
+    reservs(pastDate.format(formatter));
 }
 
     public void populateScheduleData(List<String> appointments) {
