@@ -83,7 +83,9 @@ public class Server extends Thread {
                         pw.println(text);
                     }
                 case "get_reserv" ->                     {
-                        pw.println("listen_users");  
+                        String username=bf.readLine();
+                        String reservs= handle.get_reserv(username); 
+                        pw.println(reservs);
                     }
                 case "get_posts" ->                     {
                      String date = bf.readLine();

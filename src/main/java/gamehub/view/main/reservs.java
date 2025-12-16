@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package gamehub.view.main;
+import gamehub.control.ClientHandle;
+import gamehub.models.User;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -45,18 +47,23 @@ public class reservs extends JLabel  {
         // 5. Add the scroll pane to the current panel
         add(scrollPane, BorderLayout.CENTER);
         
-        // --- Example of adding initial data (Matching your screenshot) ---
-        addExampleData();
+                 String tt = new ClientHandle(User.bf, User.pw).get_reserv(User.username);
+String[] reservations = tt.split("/");
+
+
+for (String reservation : reservations) {
+    reservation = reservation.trim(); 
+    String[] parts = reservation.split(",");
+    String post = parts[0].trim(); 
+    String dateHeure = parts[1].trim(); 
+    String[] dateTimeParts = dateHeure.split(" ");
+    String date = dateTimeParts[0];  
+    String heure = dateTimeParts[1]; 
+    addPostRow(post, dateHeure, "vous");
+}
     }
 
-    /**
-     * Adds a row of data to the table model.
-     * @param titre The post title (Titre)
-     * @param date The date
-     * @param responsable The username (Responsable)
-     */
     public void addPostRow(String titre, String date, String responsable) {
-        // Create an array of objects for the new row
         Object[] rowData = {titre, date, responsable};
         tableModel.addRow(rowData);
     }
@@ -64,13 +71,7 @@ public class reservs extends JLabel  {
     /**
      * Fills the table with the sample data shown in your screenshot.
      */
-    private void addExampleData() {
-        addPostRow("abdo", "15/12", "ali");
-        addPostRow("sofiane", "16/12", "ahmed");
-        addPostRow("yahia", "17/12", "cr");
-        addPostRow("abdo", "15/12", "ali");
-        addPostRow("sofiane", "16/12", "ahmed");
-    }
+
 
     // --- Example Main Method for Testing ---
     public static void main(String[] args) {

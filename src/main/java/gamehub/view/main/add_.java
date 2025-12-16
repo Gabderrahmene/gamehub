@@ -86,7 +86,6 @@ public class add_ extends javax.swing.JFrame {
         x = (screenSize.width - frameSize.width) / 2;
         y = (screenSize.height - frameSize.height) / 2;
         setLocation(x, y);
-
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));

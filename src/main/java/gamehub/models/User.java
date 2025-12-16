@@ -12,7 +12,7 @@ import java.io.BufferedReader;
  * @author abdou
  */
 public class User {
-    private String username;
+    public static  String username;
     public static BufferedReader bf;
     public static PrintWriter pw;
     public User (String username ,PrintWriter pw,BufferedReader bf){

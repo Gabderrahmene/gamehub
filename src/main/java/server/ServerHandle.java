@@ -47,6 +47,7 @@ public class ServerHandle {
                 //execute query
                 try (ResultSet rs = stmt.executeQuery("SELECT username,password FROM client WHERE username = '"+username+"'" )) {
                     if (!rs.first()) {
+                        
                         return "-1";
                     }
                     rs.first();
@@ -195,14 +196,14 @@ public class ServerHandle {
             System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             return "-1";
         }}
-        public String get_reserv(){
+        public String get_reserv(String username){
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement"SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";"
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("SELECT c.username,  p.post_name, r.date FROM reserv r INNER JOIN client c ON r.id_user = c.id_user INNER JOIN post p ON r.id_post = p.id_post;" )) {
+                try (ResultSet rs = stmt.executeQuery("SELECT r.date, p.post_name FROM reserv r INNER JOIN client c ON r.id_client = c.id INNER JOIN post p ON r.id_post = p.id_post WHERE c.username = '"+username+"';")) {
                     String res = "";
                     while (rs.next()) {
-                        res+=rs.getString("username")+","+rs.getString("post_name")+","+rs.getString("date")+":";
+                        res+=rs.getString("post_name")+","+rs.getString("date")+"/";
                 }
                     return res;
                 } catch (SQLException ex) {

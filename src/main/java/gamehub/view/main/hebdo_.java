@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -22,13 +24,16 @@ public class hebdo_ extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(hebdo_.class.getName());
       private final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     private final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
-    
+    private JButton backwardButton;
+private JButton nextButton;
     // List to hold all the JPanels in the grid for easy access/looping
      private List<JPanel> scheduleCells;
     private JPanel scheduleGrid;
     /**
      * Creates new form hebdo_
      */
+    LocalDate currentDate = LocalDate.now();
+    LocalDate Dat = LocalDate.now();
     public hebdo_() {
         initComponents();
         
@@ -67,10 +72,23 @@ public class hebdo_ extends javax.swing.JFrame {
              // Parse and populate schedule with reservations
              
              String po=new ClientHandle(User.bf,User.pw).get_posts("2025-11-11");
-             jLabel1.setText(po);
          } catch (IOException ex) {
              System.getLogger(hebdo_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
          }
+                          String tt = new ClientHandle(User.bf, User.pw).get_reserv(User.username);
+String[] reservations = tt.split("/");
+
+
+for (String reservation : reservations) {
+    reservation = reservation.trim(); 
+    String[] parts = reservation.split(",");
+    String post = parts[0].trim(); 
+    String dateHeure = parts[1].trim(); 
+    String[] dateTimeParts = dateHeure.split(" ");
+    String date = dateTimeParts[0];  
+    String heure = dateTimeParts[1]; 
+
+}
          
     }
     private List<String> parseReservations(String reservationData) {
@@ -153,15 +171,31 @@ public class hebdo_ extends javax.swing.JFrame {
      */
      private JPanel createNavigationPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.add(new JButton("BACKWARD"));
-        panel.add(new JButton("NEXT"));
+        backwardButton = new JButton("BACKWARD");
+        nextButton = new JButton("NEXT");
+        backwardButton.addActionListener(e -> handleBackward());
+        nextButton.addActionListener(e -> handleNext());
+       panel.add(backwardButton);
+       panel.add(nextButton);
         return panel;
+    
+    
     }
+ private void handleNext() {
+    LocalDate futureDate = Dat.plusDays(6);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String formattedDate = futureDate.format(formatter);
+    week.setText(Dat.format(formatter) + " -> " + formattedDate);
+    Dat = futureDate.plusDays(1);
+}
 
-    /**
-     * *** This is the part that fulfills your looping requirement ***
-     * Inserts data into the schedule cells.
-     */
+private void handleBackward() {
+    LocalDate pastDate = Dat.minusDays(7);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    week.setText(pastDate + " -> " + Dat.minusDays(1));
+    Dat = pastDate;
+}
+
     public void populateScheduleData(List<String> appointments) {
         int maxIndex = Math.min(appointments.size(), scheduleCells.size());
         
@@ -195,11 +229,11 @@ public class hebdo_ extends javax.swing.JFrame {
     private void initComponents() {
 
         res = new javax.swing.JScrollPane();
-        jLabel1 = new javax.swing.JLabel();
+        week = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("jLabel1");
+        week.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,14 +245,14 @@ public class hebdo_ extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(315, 315, 315)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(week, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(377, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(week, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(res, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                 .addContainerGap())
@@ -251,7 +285,7 @@ public class hebdo_ extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane res;
+    private javax.swing.JLabel week;
     // End of variables declaration//GEN-END:variables
 }

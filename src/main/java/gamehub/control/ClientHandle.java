@@ -56,9 +56,10 @@ public class ClientHandle {
         pw.println(id_reserv);
 
     }
-    public String get_reserv(){
+    public String get_reserv(String username){
         try {
             pw.println("get_reserv");
+            pw.println(username);
             return bf.readLine();
         } catch (IOException ex) {
             System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
