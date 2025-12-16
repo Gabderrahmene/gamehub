@@ -1,0 +1,48 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package gamehub.view.mensuel;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import javax.swing.JLabel;
+
+/**
+ *
+ * @author abdou
+ */
+public class eventLabel extends JLabel {
+
+    private final int arcWidth = 5;
+    private final int arcHeight = 5;
+
+    public eventLabel(String event) {
+        this.setText(event);
+        setFont(new Font("Arial", Font.BOLD, 10));
+        setOpaque(false);
+        setForeground(Color.WHITE);
+        setBackground(new Color(97, 49, 237));
+        setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        try {
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(getBackground());
+            g2.fillRect(0, 0, getWidth(), getHeight());
+        } finally {
+            g2.dispose();
+        }
+        super.paintComponent(g);
+    }
+}
