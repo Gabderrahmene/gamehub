@@ -75,20 +75,7 @@ private JButton nextButton;
          } catch (IOException ex) {
              System.getLogger(hebdo_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
          }
-                          String tt = new ClientHandle(User.bf, User.pw).get_reserv(User.username);
-String[] reservations = tt.split("/");
-
-
-for (String reservation : reservations) {
-    reservation = reservation.trim(); 
-    String[] parts = reservation.split(",");
-    String post = parts[0].trim(); 
-    String dateHeure = parts[1].trim(); 
-    String[] dateTimeParts = dateHeure.split(" ");
-    String date = dateTimeParts[0];  
-    String heure = dateTimeParts[1]; 
-
-}
+ 
          
     }
     private List<String> parseReservations(String reservationData) {
@@ -181,6 +168,22 @@ for (String reservation : reservations) {
     
     
     }
+     private void revrvs(String date1){
+    String tt = new ClientHandle(User.bf, User.pw).get_reserv_wek(User.username,date1);
+String[] reservations = tt.split("/");
+
+
+for (String reservation : reservations) {
+    reservation = reservation.trim(); 
+    String[] parts = reservation.split(",");
+    String post = parts[0].trim(); 
+    String dateHeure = parts[1].trim(); 
+    String[] dateTimeParts = dateHeure.split(" ");
+    String date = dateTimeParts[0];  
+    String heure = dateTimeParts[1]; 
+
+}
+     }
  private void handleNext() {
     LocalDate futureDate = Dat.plusDays(6);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
