@@ -89,7 +89,8 @@ public class Server extends Thread {
                     }
                  case "get_reserv_wek" ->                     {
                         String username=bf.readLine();
-                        String reservs= handle.get_reserv(username); 
+                        String date=bf.readLine();
+                        String reservs= handle.get_reserv_wek(username, date); 
                         pw.println(reservs);
                     }
                 case "get_posts" ->                     {

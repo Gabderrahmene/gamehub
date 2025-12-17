@@ -206,6 +206,7 @@ public class ServerHandle {
                     while (rs.next()) {
                         res+=rs.getString("post_name")+","+rs.getString("date")+"/";
                 }
+                    
                     return res;
                 } catch (SQLException ex) {
                     System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
@@ -223,12 +224,13 @@ public class ServerHandle {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement"SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";"
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("SELECT p.post_name, r.date FROM reserv r INNER JOIN client c ON r.id_client = c.id INNER JOIN post p ON r.id_post = p.id_post WHERE c.username = '" + username + "' AND r.date BETWEEN '" + date + " 00:00:00' AND DATE_ADD('" + date + " 23:59:59', INTERVAL 6 DAY) ORDER BY r.date ASC")) {
+                try (ResultSet rs = stmt.executeQuery("SELECT p.post_name, r.date FROM reserv r INNER JOIN client c ON r.id_client = c.id INNER JOIN post p ON r.id_post = p.id_post WHERE c.id = '" + username + "' AND r.date BETWEEN '" + date + " 00:00:00' AND DATE_ADD('" + date + " 23:59:59', INTERVAL 6 DAY) ORDER BY r.date ASC")) {
                     String res = "";
                     while (rs.next()) {
                         System.out.print(rs.getString("post_name")+","+rs.getString("date")+"/");
                         res+=rs.getString("post_name")+","+rs.getString("date")+"/";
                 }
+                    System.out.print(res);
                     return res;
                 } catch (SQLException ex) {
                     System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
