@@ -20,8 +20,8 @@ public class hourSelect extends JComboBox {
     }
     
     public String getSelection(){
-        
-        return (String) this.getSelectedItem();
+        String[] bilal =((String) this.getSelectedItem()).split("-");
+        return bilal[0];
         
     }
 }

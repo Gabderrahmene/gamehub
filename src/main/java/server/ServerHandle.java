@@ -46,14 +46,14 @@ public class ServerHandle {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
                 //execute query
-                try (ResultSet rs = stmt.executeQuery("SELECT username,password FROM client WHERE username = '"+username+"'" )) {
+                try (ResultSet rs = stmt.executeQuery("SELECT * FROM client WHERE username = '"+username+"'" )) {
                     if (!rs.first()) {
                         
                         return "-1";
                     }
                     rs.first();
                     if (password.equals(rs.getString("password"))){
-                        return rs.getString("username");
+                        return rs.getString("id");
                     }else{
                         return "-1";
                     }
@@ -201,7 +201,7 @@ public class ServerHandle {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement"SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";"
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("SELECT r.date, p.post_name FROM reserv r INNER JOIN client c ON r.id_client = c.id INNER JOIN post p ON r.id_post = p.id_post WHERE c.username = '"+username+"';")) {
+                try (ResultSet rs = stmt.executeQuery("SELECT r.date, p.post_name FROM reserv r INNER JOIN client c ON r.id_client = c.id INNER JOIN post p ON r.id_post = p.id_post WHERE c.id = '"+username+"';")) {
                     String res = "";
                     while (rs.next()) {
                         res+=rs.getString("post_name")+","+rs.getString("date")+"/";
@@ -245,10 +245,10 @@ public class ServerHandle {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ='"+date+"';" )) {
+                try (ResultSet rs = stmt.executeQuery("SELECT P.id_post,P.post_name FROM post P LEFT JOIN reserv R ON P.id_post =R.id_post AND R.date ='"+date+"' WHERE R.id_post is null;" )) {
                     String res = "";
                     while (rs.next()) {
-                        res+=rs.getString("post_name")+",";
+                        res+=rs.getString("id_post")+"."+rs.getString("post_name")+",";
                 }
                     return res;
                 } catch (SQLException ex) {
@@ -314,7 +314,7 @@ public class ServerHandle {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
                 try  {
-                    stmt.executeUpdate("INSERT INTO reserv(id_user,date,post) VALUES ('"+id_user+"','"+date+"','"+post+"')");
+                    stmt.executeUpdate("INSERT INTO reserv(id_client,date,id_post) VALUES ('"+id_user+"','"+date+"','"+post+"')");
                     return "0";
                 } catch (SQLException ex) {
                     System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);

@@ -22,8 +22,21 @@ public class AddGlobal extends javax.swing.JDialog {
     public AddGlobal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        warning1.setVisible(false);
+        confirmButton1.setEnabled(false);
+        post.removeAllItems();
+        posts();
+    }
+    public void posts(){
+        post.removeAllItems();
+        warning1.setVisible(false);
         try {
             String po = new ClientHandle(User.bf, User.pw).get_posts(year.getSelection()+ "-" + month.getSelection() +"-" + day.getSelection() + " " + hour.getSelection() + ":00");
+            if(po.isBlank()){
+                warning1.setVisible(true);
+                confirmButton1.setEnabled(false);
+                return;
+            }
             String[] pos= po.split(",");
             for(String i:pos){
                 post.addPost(i);
@@ -32,7 +45,6 @@ public class AddGlobal extends javax.swing.JDialog {
             System.getLogger(AddGlobal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,12 +65,25 @@ public class AddGlobal extends javax.swing.JDialog {
         post = new gamehub.view.add.postSelect();
         confirmButton1 = new gamehub.view.add.confirmButton();
         cancelButton1 = new gamehub.view.add.cancelButton();
+        warning1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         day.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dayActionPerformed(evt);
+            }
+        });
+
+        year.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yearActionPerformed(evt);
+            }
+        });
+
+        month.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                monthActionPerformed(evt);
             }
         });
 
@@ -71,8 +96,35 @@ public class AddGlobal extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel3.setText("poste:");
 
+        hour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hourActionPerformed(evt);
+            }
+        });
+
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel4.setText("heure:");
+
+        post.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postActionPerformed(evt);
+            }
+        });
+
+        confirmButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmButton1ActionPerformed(evt);
+            }
+        });
+
+        cancelButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButton1ActionPerformed(evt);
+            }
+        });
+
+        warning1.setForeground(new java.awt.Color(255, 51, 51));
+        warning1.setText("aucun poste disponible");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,16 +139,22 @@ public class AddGlobal extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+                        .addGap(28, 28, 28)
+                        .addComponent(warning1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel3)
@@ -130,7 +188,9 @@ public class AddGlobal extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(post, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(post, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(warning1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirmButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,8 +207,34 @@ public class AddGlobal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayActionPerformed
-        System.out.println("blbl");
+        posts();
     }//GEN-LAST:event_dayActionPerformed
+
+    private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_cancelButton1ActionPerformed
+
+    private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
+        String[] pos =post.getSelection().split("\\.");
+        new ClientHandle(User.bf, User.pw).create_reserv(User.username,year.getSelection()+ "-" + month.getSelection() +"-" + day.getSelection() + " " + hour.getSelection() + ":00",pos[0]);
+        dispose();
+    }//GEN-LAST:event_confirmButton1ActionPerformed
+
+    private void hourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourActionPerformed
+       posts();
+    }//GEN-LAST:event_hourActionPerformed
+
+    private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
+        posts();
+    }//GEN-LAST:event_monthActionPerformed
+
+    private void yearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearActionPerformed
+        posts();
+    }//GEN-LAST:event_yearActionPerformed
+
+    private void postActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postActionPerformed
+        confirmButton1.setEnabled(true);
+    }//GEN-LAST:event_postActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,6 +284,7 @@ public class AddGlobal extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private gamehub.view.add.monthSelect month;
     private gamehub.view.add.postSelect post;
+    private javax.swing.JLabel warning1;
     private gamehub.view.add.yearSelect year;
     // End of variables declaration//GEN-END:variables
 }

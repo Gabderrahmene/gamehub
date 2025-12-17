@@ -52,7 +52,8 @@ String[] reservations = tt.split("/");
 
 
 for (String reservation : reservations) {
-    reservation = reservation.trim(); 
+    if(!reservation.isBlank()){
+        reservation = reservation.trim(); 
     String[] parts = reservation.split(",");
     String post = parts[0].trim(); 
     String dateHeure = parts[1].trim(); 
@@ -60,6 +61,8 @@ for (String reservation : reservations) {
     String date = dateTimeParts[0];  
     String heure = dateTimeParts[1]; 
     addPostRow(post, dateHeure, "vous");
+    }
+    
 }
     }
 
