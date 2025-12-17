@@ -4,6 +4,7 @@
  */
 package gamehub.view.main;
 
+import gamehub.view.add.AddGlobal;
 import java.io.IOException;
 import javax.swing.JFrame;
 
@@ -112,7 +113,8 @@ public class reserv extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        new add_().setVisible(true);
+        AddGlobal addReserv = new AddGlobal(null,true);
+        addReserv.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -20,46 +20,47 @@ import java.net.Socket;
  * @author abdou
  */
 public class login extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(login.class.getName());
     private BufferedReader bf;
     private PrintWriter pw;
+
     /**
      * Creates new form login
      */
     public login() {
         try {
             initComponents();
-            Dimension screenSize,frameSize;
-        int x,y;
-        screenSize=Toolkit.getDefaultToolkit().getScreenSize();
-        frameSize=getSize();
-        x=(screenSize.width-frameSize.width)/2;
-        y=(screenSize.height-frameSize.height)/2;
-        setLocation(x, y);
-        
+            Dimension screenSize, frameSize;
+            int x, y;
+            screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            frameSize = getSize();
+            x = (screenSize.width - frameSize.width) / 2;
+            y = (screenSize.height - frameSize.height) / 2;
+            setLocation(x, y);
+
             warning1.setVisible(false);
             warning2.setVisible(false);
             Socket soc = new Socket("localhost", 5640);
             bf = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             pw = new PrintWriter(soc.getOutputStream(), true);
-            
+
         } catch (IOException ex) {
             System.getLogger(login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-         username.addFocusListener(new java.awt.event.FocusAdapter() {
-       
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            warning1.setVisible(false);
-        }
-    });
-    
-    password.addFocusListener(new java.awt.event.FocusAdapter() {
-        
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            warning2.setVisible(false);
-        }
-    });  
+        username.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                warning1.setVisible(false);
+            }
+        });
+
+        password.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                warning2.setVisible(false);
+            }
+        });
     }
 
     /**
@@ -254,32 +255,31 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-         String pass=new String(password.getPassword());       
-        if (  ! username.getText().isBlank() && !pass.isBlank() ){
-            
-       
-       
-        String id = new ClientHandle(this.bf,this.pw).login(username.getText(),new String (password.getPassword()));
-        if(!id.equals("-1")){
-            User user=new User(id,this.pw,this.bf);
-            PrintWriter pw = User.pw;
-            new HOME().setVisible(true);
-            dispose();
-        }}else{
-            if(username.getText().isBlank()){
+        String pass = new String(password.getPassword());
+        if (!username.getText().isBlank() && !pass.isBlank()) {
+
+            String id = new ClientHandle(this.bf, this.pw).login(username.getText(), new String(password.getPassword()));
+            if (!id.equals("-1")) {
+                User user = new User(id, this.pw, this.bf);
+                PrintWriter pw = User.pw;
+                new HOME().setVisible(true);
+                dispose();
+            }
+        } else {
+            if (username.getText().isBlank()) {
                 warning1.setVisible(true);
-            }if(pass.isBlank()){
+            }
+            if (pass.isBlank()) {
                 warning2.setVisible(true);
             }
-            
-            
+
         }
-               
+
     }//GEN-LAST:event_loginActionPerformed
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
         // TODO add your handling code here:
-        new register(this.bf,this.pw).setVisible(true);
+        new register(this.bf, this.pw).setVisible(true);
         dispose();
     }//GEN-LAST:event_registerActionPerformed
 
