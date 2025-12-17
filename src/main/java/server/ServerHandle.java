@@ -245,7 +245,7 @@ public class ServerHandle {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ="+date+";" )) {
+                try (ResultSet rs = stmt.executeQuery("SELECT post_name FROM post P LEFT OUTER JOIN reserv R ON P.id_post =R.id_post AND R.date ='"+date+"';" )) {
                     String res = "";
                     while (rs.next()) {
                         res+=rs.getString("post_name")+",";

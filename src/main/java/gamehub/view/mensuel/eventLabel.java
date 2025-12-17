@@ -17,12 +17,11 @@ import javax.swing.JLabel;
  * @author abdou
  */
 public class eventLabel extends JLabel {
-
-    private final int arcWidth = 5;
-    private final int arcHeight = 5;
-
+    
+    private String event;
     public eventLabel(String event) {
         this.setText(event);
+        this.event=event;
         setFont(new Font("Arial", Font.BOLD, 10));
         setOpaque(false);
         setForeground(Color.WHITE);
@@ -30,7 +29,9 @@ public class eventLabel extends JLabel {
         setAlignmentX(Component.CENTER_ALIGNMENT);
 
     }
-
+    public String getEvent(){
+        return this.event;
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

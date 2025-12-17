@@ -3,14 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gamehub.view.main;
+
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.view.mensuel.eventLabel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
@@ -20,39 +23,41 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author abdel
  */
 public class add_ extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(add_.class.getName());
- private BufferedReader bf;
+    private BufferedReader bf;
     private PrintWriter pw;
     private String id_user;
     private String ids;
     private JList<User> userList;
     private final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
     public String hor;
+    public String post;
+    private JPanel panel;
 
     /**
      * Creates new form add_
      */
     public add_() {
+        this.panel= new JPanel();
+        this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
         initComponents();
-
+        
         DefaultTableModel model = new DefaultTableModel(new String[]{""}, 0);
-
+        this.panel.add(new eventLabel("ana samaka"));
         for (String value : timeSlots) {
             model.addRow(new Object[]{value});
         }
-
-
+        posts.setViewportView(panel);
         JTable table = new JTable(model);
 
-
         table.setTableHeader(null);
-
 
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -60,16 +65,23 @@ public class add_ extends javax.swing.JFrame {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     try {
-                        
+
                         String selectedValue = (String) table.getValueAt(selectedRow, 0);
                         System.out.println("Selected time slot: " + selectedValue);
-                        hor=selectedValue;
+                        hor = selectedValue;
                         String[] parts = hor.split("-");
-                String startTime = parts[0];
-                System.out.print(year.getSelectedItem()+"-"+month.getSelectedIndex()+"-"+day.getSelectedItem()+" "+startTime+":00");
-                int ind=month.getSelectedIndex()+1;
-            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+(ind)+"-"+day.getSelectedItem()+" "+startTime+":00");
-                        System.out.print(po);
+                        String startTime = parts[0];
+                        System.out.print(year.getSelectedItem() + "-" + (month.getSelectedIndex() + 1) + "-" + day.getSelectedItem() + " " + startTime + ":00");
+                        int ind = month.getSelectedIndex() + 1;
+                        String po = new ClientHandle(User.bf, User.pw).get_posts(year.getSelectedItem() + "-" + (ind) + "-" + day.getSelectedItem() + " " + startTime + ":00");
+                        String[] pos = po.split(",");
+                        System.out.println(Arrays.toString(pos));
+                        for (String i : pos) {
+                            panel.add(new eventLabel(i));
+                            
+                        }
+                        panel.revalidate();
+                        panel.repaint();
                     } catch (IOException ex) {
                         logger.log(java.util.logging.Level.SEVERE, null, ex);
                     }
@@ -78,7 +90,7 @@ public class add_ extends javax.swing.JFrame {
         });
 
         jScrollPane1.setViewportView(table);
-    
+
         Dimension screenSize, frameSize;
         int x, y;
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -90,15 +102,15 @@ public class add_ extends javax.swing.JFrame {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         DefaultListModel<User> users = new DefaultListModel<>();
-    
+
         userList = new JList<>(users);
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         userList.setFixedCellHeight(36);
         userList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                          int index, boolean isSelected,
-                                                          boolean cellHasFocus) {
+                    int index, boolean isSelected,
+                    boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof User) {
                     User u = (User) value;
@@ -107,19 +119,18 @@ public class add_ extends javax.swing.JFrame {
                 return this;
             }
         });
-        
+
         jScrollPane3.setViewportView(userList);
-        
+
         userList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 1) {
-                   
+
                 }
             }
         });
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -143,7 +154,7 @@ public class add_ extends javax.swing.JFrame {
         date.setToolTipText("");
         jScrollPane1.setViewportView(date);
 
-        jScrollPane3.setViewportView(posts);
+        jScrollPane3.setViewportView(panel);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel1.setText("Hour :");
@@ -169,19 +180,19 @@ public class add_ extends javax.swing.JFrame {
         month.setBackground(new java.awt.Color(0, 0, 0));
         month.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         month.setForeground(new java.awt.Color(255, 255, 255));
-        month.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        month.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));
         month.addActionListener(this::monthActionPerformed);
 
         day.setBackground(new java.awt.Color(0, 0, 102));
         day.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         day.setForeground(new java.awt.Color(255, 255, 255));
-        day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28" }));
+        day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"}));
         day.addActionListener(this::dayActionPerformed);
 
         year.setBackground(new java.awt.Color(51, 0, 102));
         year.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         year.setForeground(new java.awt.Color(255, 255, 255));
-        year.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2025", "2026", "2027" }));
+        year.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"2025", "2026", "2027"}));
         year.addActionListener(this::yearActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
@@ -190,63 +201,63 @@ public class add_ extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(confirm, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jLabel2)))
-                .addGap(49, 49, 49))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(38, 38, 38)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel3)
+                                                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel1)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                .addComponent(confirm, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addGap(18, 18, 18)
+                                                                                .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(93, 93, 93)
+                                                .addComponent(jLabel2)))
+                                .addGap(49, 49, 49))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel4)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(confirm)
-                    .addComponent(cancel))
-                .addGap(28, 28, 28))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(confirm)
+                                        .addComponent(cancel))
+                                .addGap(28, 28, 28))
         );
 
         pack();
@@ -256,7 +267,7 @@ public class add_ extends javax.swing.JFrame {
         try {
             String[] parts = hor.split("-");
             String startTime = parts[0];
-            String po = new ClientHandle(User.bf,User.pw).get_posts(year.getSelectedItem()+"-"+month.getSelectedItem()+"-"+day.getSelectedItem()+" "+startTime);
+            String po = new ClientHandle(User.bf, User.pw).get_posts(year.getSelectedItem() + "-" + month.getSelectedItem() + "-" + day.getSelectedItem() + " " + startTime);
         } catch (IOException ex) {
             System.getLogger(add_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -268,15 +279,14 @@ public class add_ extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
-        if(month.getSelectedItem()!="February"){
+        if (month.getSelectedItem() != "February") {
             day.addItem("29");
             day.addItem("30");
-        }else{
+        } else {
             day.removeItem("29");
             day.removeItem("30");
         }
-        
-                
+
     }//GEN-LAST:event_monthActionPerformed
 
     private void dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayActionPerformed
@@ -307,7 +317,7 @@ public class add_ extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-         try {
+        try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -321,7 +331,6 @@ public class add_ extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-
     private javax.swing.JButton cancel;
     private javax.swing.JToggleButton confirm;
     private javax.swing.JScrollPane date;
