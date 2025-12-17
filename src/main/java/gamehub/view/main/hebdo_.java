@@ -71,15 +71,6 @@ private JButton nextButton;
         
         // 7. Set the main panel as the view in the res JScrollPane
         res.setViewportView(mainPanel);
-        
-        // Load and display reservations
-         try {
-             // Parse and populate schedule with reservations
-             
-             String po=new ClientHandle(User.bf,User.pw).get_posts("2025-11-11");
-         } catch (IOException ex) {
-             System.getLogger(hebdo_.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-         }
  
          
     }
@@ -163,82 +154,69 @@ private JButton nextButton;
      */
      private JPanel createNavigationPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        backwardButton = new JButton("BACKWARD");
-        nextButton = new JButton("NEXT");
-        backwardButton.addActionListener(e -> handleBackward());
-        nextButton.addActionListener(e -> handleNext());
-       panel.add(backwardButton);
-       panel.add(nextButton);
         return panel;
     
     
     }
-     private void reservs(String date1){
-     String tt = new ClientHandle(User.bf, User.pw).get_reserv_wek(User.username, date1);
-    String[] reservations = tt.split("/");
-    // Extract the day from date1 (format: yyyy-MM-dd)
-    String[] date1Parts = date1.split("-");
-    int date1Int = Integer.parseInt(date1Parts[2]); // Get the day part
-     for (int i = 0; i < gridPanel.getComponentCount(); i++) {
+  private void reservs(String date1) {
+    // 1. Clear the grid before loading new data
+    for (int i = 0; i < gridPanel.getComponentCount(); i++) {
         JPanel cell = (JPanel) gridPanel.getComponent(i);
-        // Remove all components from the cell
         cell.removeAll();
         cell.revalidate();
         cell.repaint();
     }
-    for (String reservation : reservations) {
-        try {
-            reservation = reservation.trim(); 
-            String[] parts = reservation.split(",");
-            String post = parts[0].trim(); 
-            String dateHeure = parts[1].trim(); 
-            String[] dateTimeParts = dateHeure.split(" ");
-            String date = dateTimeParts[0];
-            String[] part = date.split("-");
-            String day = part[2].trim();
-            String heure = dateTimeParts[1];
-            int dayInt = Integer.parseInt(day);
-           
-            int i = Arrays.asList(timeSlots).indexOf(heure);
-            
-            // Now you can do the arithmetic
-            int k = dayInt - date1Int;
-            
-            int place = ((i * 7) + k);
-            System.out.println(reservation); // Changed to println
-            System.out.println(i); 
-            System.out.println(dayInt); 
-            System.out.println(date1Int); 
-            JPanel aa = (JPanel)gridPanel.getComponent(place);
-            aa.add(new eventLabel(post));
-            aa.revalidate();
-            aa.repaint();
-            
-        } catch (Exception e) {
-            System.err.println("Error processing reservation: " + reservation);
-            e.printStackTrace();
+
+    String tt = new ClientHandle(User.bf, User.pw).get_reserv_wek(User.username, date1);
+    
+    if (tt != null && !tt.equals("-1")) {
+        String[] reservations = tt.split("/");
+        LocalDate weekStartDate = LocalDate.parse(date1); 
+        for (String reservation : reservations) {
+            try {
+                reservation = reservation.trim();
+                String[] parts = reservation.split(",");
+                String post = parts[0].trim();
+                String dateHeure = parts[1].trim(); 
+
+                String[] dateTimeParts = dateHeure.split(" ");
+                LocalDate resDate = LocalDate.parse(dateTimeParts[0]);
+                
+                String timeFromDB = dateTimeParts[1].substring(0, 5); 
+
+                int t = -1;
+                for (int i = 0; i < timeSlots.length; i++) {
+                    if (timeSlots[i].startsWith(timeFromDB)) {
+                        t = i;
+                        break;
+                    }
+                }
+
+
+                int k = (int) java.time.temporal.ChronoUnit.DAYS.between(weekStartDate, resDate);
+
+                if (t != -1 && k >= 0 && k < 7) {
+                    int place = (t * 7) + k;
+                    if (place >= 0 && place < gridPanel.getComponentCount()) {
+                        JPanel aa = (JPanel) gridPanel.getComponent(place);
+                        aa.add(new eventLabel(post));
+                        aa.revalidate();
+                        aa.repaint();
+                    }
+                    System.out.println("Processing: " + post);
+System.out.println("  -> Date Found: " + resDate + " | Week Start: " + weekStartDate);
+System.out.println("  -> Days Diff (k): " + k);
+System.out.println("  -> Time Found: [" + timeFromDB + "]");
+System.out.println("  -> Row Index (t): " + t);
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing reservation: " + reservation);
+            }
         }
-    
-    
-    
-}
-     }
- private void handleNext() {
-    LocalDate futureDate = Dat.plusDays(6);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    String formattedDate = futureDate.format(formatter);
-    week.setText(Dat.format(formatter) + " -> " + formattedDate);
-    Dat = futureDate.plusDays(1);
-    reservs(Dat.format(formatter));
+    }
 }
 
-private void handleBackward() {
-    LocalDate pastDate = Dat.minusDays(7);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    week.setText(pastDate + " -> " + Dat.minusDays(1));
-    Dat = pastDate;
-    reservs(pastDate.format(formatter));
-}
+
 
     public void populateScheduleData(List<String> appointments) {
         int maxIndex = Math.min(appointments.size(), scheduleCells.size());
@@ -274,10 +252,18 @@ private void handleBackward() {
 
         res = new javax.swing.JScrollPane();
         week = new javax.swing.JLabel();
+        next = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         week.setText("jLabel1");
+
+        next.setText("next");
+        next.addActionListener(this::nextActionPerformed);
+
+        back.setText("back");
+        back.addActionListener(this::backActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -291,6 +277,12 @@ private void handleBackward() {
                 .addGap(315, 315, 315)
                 .addComponent(week, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(377, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(161, 161, 161)
+                .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(238, 238, 238))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,12 +290,40 @@ private void handleBackward() {
                 .addGap(36, 36, 36)
                 .addComponent(week, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(res, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(res, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
+
+    Dat = Dat.plusDays(7);
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate weekEnd = Dat.plusDays(6);
+    
+    week.setText(Dat.format(formatter) + " -> " + weekEnd.format(formatter));
+    reservs(Dat.format(formatter));
+    
+    System.out.println("Nex wek" + Dat);
+    }//GEN-LAST:event_nextActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+  Dat = Dat.minusDays(7);
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate weekEnd = Dat.plusDays(6);
+    week.setText(Dat.format(formatter) + " -> " + weekEnd.format(formatter));
+    reservs(Dat.format(formatter));
+    
+    System.out.println("prec week " + Dat);        
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -329,6 +349,8 @@ private void handleBackward() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
+    private javax.swing.JButton next;
     private javax.swing.JScrollPane res;
     private javax.swing.JLabel week;
     // End of variables declaration//GEN-END:variables
