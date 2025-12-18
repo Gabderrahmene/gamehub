@@ -8,22 +8,21 @@ package gamehub.models;
  *
  * @author abdou
  */
-public class Group {
+public class post {
     private String id;
-    private String title;
+    private String name;
 
-    public Group(String id, String title) {
+    public post(String id, String name) {
         this.id = id;
-        this.title = title;
+        this.name = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
-    
     
 }
