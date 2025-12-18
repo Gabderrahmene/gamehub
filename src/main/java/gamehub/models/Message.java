@@ -9,6 +9,7 @@ package gamehub.models;
  * @author abdou
  */
 public class Message {
+
     private String id;
     private String username;
     private String content;
@@ -37,6 +38,4 @@ public class Message {
         return date;
     }
 
-    
-    
 }

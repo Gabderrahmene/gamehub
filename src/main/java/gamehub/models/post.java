@@ -9,6 +9,7 @@ package gamehub.models;
  * @author abdou
  */
 public class post {
+
     private String id;
     private String name;
 
@@ -24,5 +25,5 @@ public class post {
     public String getName() {
         return name;
     }
-    
+
 }

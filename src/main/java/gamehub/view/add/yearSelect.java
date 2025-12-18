@@ -16,12 +16,12 @@ public class yearSelect extends JComboBox {
         this.setBackground(new java.awt.Color(51, 0, 102));
         this.setFont(new java.awt.Font("Segoe UI", 3, 12));
         this.setForeground(new java.awt.Color(255, 255, 255));
-        this.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"2025","2026","2027"}));
+        this.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"2025", "2026", "2027"}));
     }
-    
-    public String getSelection(){
-        
+
+    public String getSelection() {
+
         return (String) this.getSelectedItem();
-        
+
     }
 }

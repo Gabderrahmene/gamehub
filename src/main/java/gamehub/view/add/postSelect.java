@@ -18,13 +18,14 @@ public class postSelect extends JComboBox {
         this.setForeground(new java.awt.Color(255, 255, 255));
         this.setModel(new javax.swing.DefaultComboBoxModel<>());
     }
-    
-    public String getSelection(){
-        
+
+    public String getSelection() {
+
         return (String) this.getSelectedItem();
-        
+
     }
-    public void addPost(String post){
+
+    public void addPost(String post) {
         this.addItem(post);
     }
 }

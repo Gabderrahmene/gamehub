@@ -15,7 +15,7 @@ public class JourTitre extends JButton {
 
     public JourTitre() {
         this.setBorder(null);
-        this.setBackground(new Color(54,15,90));
+        this.setBackground(new Color(54, 15, 90));
         this.setForeground(Color.WHITE);
     }
 }

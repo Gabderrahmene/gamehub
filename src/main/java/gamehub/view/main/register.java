@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gamehub.view.main;
+
 import gamehub.control.ClientHandle;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -15,7 +16,7 @@ import javax.swing.JLabel;
  * @author abdou
  */
 public class register extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(register.class.getName());
     private BufferedReader bf;
     private PrintWriter pw;
@@ -23,33 +24,33 @@ public class register extends javax.swing.JFrame {
     /**
      * Creates new form login
      */
-    public register(BufferedReader bf,PrintWriter pw) {
+    public register(BufferedReader bf, PrintWriter pw) {
         initComponents();
-        Dimension screenSize,frameSize;
-    int x,y;
-    screenSize=Toolkit.getDefaultToolkit().getScreenSize();
-    frameSize=getSize();
-    x=(screenSize.width-frameSize.width)/2;
-    y=(screenSize.height-frameSize.height)/2;
-    setLocation(x, y);
+        Dimension screenSize, frameSize;
+        int x, y;
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frameSize = getSize();
+        x = (screenSize.width - frameSize.width) / 2;
+        y = (screenSize.height - frameSize.height) / 2;
+        setLocation(x, y);
 
         warning1.setVisible(false);
         warning2.setVisible(false);
         this.bf = bf;
         this.pw = pw;
         username.addFocusListener(new java.awt.event.FocusAdapter() {
-       
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            warning1.setVisible(false);
-        }
-    });
-    
-    password.addFocusListener(new java.awt.event.FocusAdapter() {
-        
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            warning2.setVisible(false);
-        }
-    });
+
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                warning1.setVisible(false);
+            }
+        });
+
+        password.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                warning2.setVisible(false);
+            }
+        });
     }
 
     /**
@@ -242,7 +243,7 @@ public class register extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameActionPerformed
-                // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_usernameActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
@@ -251,20 +252,20 @@ public class register extends javax.swing.JFrame {
     }//GEN-LAST:event_loginActionPerformed
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
-        if (  ! username.getText().isBlank() && ! password.getText().isBlank()){
-            
-       
-        String id = new ClientHandle(this.bf,this.pw).register(username.getText(),password.getText());
-        System.out.println(id);}else{
-            if(username.getText().isBlank()){
+        if (!username.getText().isBlank() && !password.getText().isBlank()) {
+
+            String id = new ClientHandle(this.bf, this.pw).register(username.getText(), password.getText());
+            System.out.println(id);
+        } else {
+            if (username.getText().isBlank()) {
                 warning1.setVisible(true);
-              
-            }if(password.getText().isBlank()){
-                warning2.setVisible(true);
-               
+
             }
-            
-            
+            if (password.getText().isBlank()) {
+                warning2.setVisible(true);
+
+            }
+
         }
     }//GEN-LAST:event_registerActionPerformed
 

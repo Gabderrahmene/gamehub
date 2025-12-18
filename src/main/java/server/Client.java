@@ -11,6 +11,7 @@ import java.io.PrintWriter;
  * @author abdou
  */
 public class Client {
+
     String id_user;
     String username;
     PrintWriter pw;
@@ -26,5 +27,5 @@ public class Client {
         this.pw = pw;
         this.act = true;
     }
-    
+
 }

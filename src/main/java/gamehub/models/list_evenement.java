@@ -11,9 +11,11 @@ import java.util.ArrayList;
  * @author abdel
  */
 public class list_evenement {
-    public static ArrayList events= new ArrayList<event>();
-    public static void  add (event eve){
+
+    public static ArrayList events = new ArrayList<event>();
+
+    public static void add(event eve) {
         events.add(eve);
-    } 
-    
+    }
+
 }

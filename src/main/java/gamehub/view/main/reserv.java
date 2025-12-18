@@ -16,35 +16,37 @@ import javax.swing.JOptionPane;
  * @author abdel
  */
 public class reserv extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(reserv.class.getName());
     private reservs tableViewComponent;
+
     /**
      * Creates new form reserv
      */
     public reserv() {
         initComponents();
-    tableViewComponent = new reservs();
-    
-    // Add it to your scroll pane (replace 'jScrollPane1' with your actual scroll pane name)
-    res.setViewportView(tableViewComponent);
-    
-    // Refresh the display
-    this.revalidate();
-    this.repaint();
+        tableViewComponent = new reservs();
+
+        // Add it to your scroll pane (replace 'jScrollPane1' with your actual scroll pane name)
+        res.setViewportView(tableViewComponent);
+
+        // Refresh the display
+        this.revalidate();
+        this.repaint();
     }
+
     private void openAgendaWindow() {
- JFrame agendaFrame = new JFrame("Agenda CollaborativeT - List of Events");
-    agendaFrame.setContentPane(new reservs()); // or however you're adding it
-    
-    // Add these essential lines:
-    agendaFrame.pack();  // Size the frame to fit its contents
-    // OR set a specific size:
-    agendaFrame.setSize(800, 600);
-    
-    agendaFrame.setLocationRelativeTo(null);  // Center on screen
-    agendaFrame.setVisible(true);
-        
+        JFrame agendaFrame = new JFrame("Agenda CollaborativeT - List of Events");
+        agendaFrame.setContentPane(new reservs()); // or however you're adding it
+
+        // Add these essential lines:
+        agendaFrame.pack();  // Size the frame to fit its contents
+        // OR set a specific size:
+        agendaFrame.setSize(800, 600);
+
+        agendaFrame.setLocationRelativeTo(null);  // Center on screen
+        agendaFrame.setVisible(true);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -112,13 +114,13 @@ public class reserv extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        AddGlobal addReserv = new AddGlobal(null,true);
+        AddGlobal addReserv = new AddGlobal(null, true);
         addReserv.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String[] selectedValues = tableViewComponent.getSelectedRowValues();
-        
+
         if (selectedValues != null) {
             String post = selectedValues[0];
             String date = selectedValues[1];
@@ -127,39 +129,39 @@ public class reserv extends javax.swing.JFrame {
             System.out.println("Selected user: " + user);
             System.out.println("Selected dat: " + date);
             System.out.println("Selected psot: " + post);
-            
+
             // Example: Show confirmation and delete
             int confirm = JOptionPane.showConfirmDialog(this,
-                "Delete this reservation?\n\n" +
-                "POST: " + post + "\n" +
-                "DATE: " + date,
-                "Confirm Deletion",
-                JOptionPane.YES_NO_OPTION);
-            
+                    "Delete this reservation?\n\n"
+                    + "POST: " + post + "\n"
+                    + "DATE: " + date,
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION);
+
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
-                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, date,  post);
-                     if (!tt.equals("-1")) {
-                    JOptionPane.showMessageDialog(this,
-                        "Reservation deleted successfully!",
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    // Delete failed
-                    JOptionPane.showMessageDialog(this,
-                        "Failed to delete reservation.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                } 
+                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, date, post);
+                    if (!tt.equals("-1")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Reservation deleted successfully!",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        // Delete failed
+                        JOptionPane.showMessageDialog(this,
+                                "Failed to delete reservation.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException ex) {
                     System.getLogger(reserv.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
             }
         } else {
             JOptionPane.showMessageDialog(this,
-                "Please select a reservation first.",
-                "No Selection",
-                JOptionPane.WARNING_MESSAGE);
+                    "Please select a reservation first.",
+                    "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

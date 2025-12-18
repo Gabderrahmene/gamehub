@@ -18,5 +18,5 @@ public class cancelButton extends JButton {
         this.setForeground(new java.awt.Color(255, 255, 255));
         this.setText("annuler");
     }
-    
+
 }

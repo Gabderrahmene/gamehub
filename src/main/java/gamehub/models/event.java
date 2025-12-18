@@ -9,5 +9,5 @@ package gamehub.models;
  * @author abdel
  */
 public class event {
-    
+
 }

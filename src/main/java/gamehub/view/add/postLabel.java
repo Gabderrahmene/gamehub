@@ -14,5 +14,5 @@ public class postLabel extends JLabel {
 
     public postLabel() {
     }
-    
+
 }

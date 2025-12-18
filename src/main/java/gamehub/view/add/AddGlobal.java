@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author abdou
  */
 public class AddGlobal extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddGlobal.class.getName());
 
     /**
@@ -27,24 +27,26 @@ public class AddGlobal extends javax.swing.JDialog {
         post.removeAllItems();
         posts();
     }
-    public void posts(){
+
+    public void posts() {
         post.removeAllItems();
         warning1.setVisible(false);
         try {
-            String po = new ClientHandle(User.bf, User.pw).get_posts(year.getSelection()+ "-" + month.getSelection() +"-" + day.getSelection() + " " + hour.getSelection() + ":00");
-            if(po.isBlank()){
+            String po = new ClientHandle(User.bf, User.pw).get_posts(year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00");
+            if (po.isBlank()) {
                 warning1.setVisible(true);
                 confirmButton1.setEnabled(false);
                 return;
             }
-            String[] pos= po.split(",");
-            for(String i:pos){
+            String[] pos = po.split(",");
+            for (String i : pos) {
                 post.addPost(i);
             }
         } catch (IOException ex) {
             System.getLogger(AddGlobal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -215,13 +217,13 @@ public class AddGlobal extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButton1ActionPerformed
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
-        String[] pos =post.getSelection().split("\\.");
-        new ClientHandle(User.bf, User.pw).create_reserv(User.username,year.getSelection()+ "-" + month.getSelection() +"-" + day.getSelection() + " " + hour.getSelection() + ":00",pos[0]);
+        String[] pos = post.getSelection().split("\\.");
+        new ClientHandle(User.bf, User.pw).create_reserv(User.username, year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", pos[0]);
         dispose();
     }//GEN-LAST:event_confirmButton1ActionPerformed
 
     private void hourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourActionPerformed
-       posts();
+        posts();
     }//GEN-LAST:event_hourActionPerformed
 
     private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed

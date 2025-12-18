@@ -76,6 +76,7 @@ public class reservs extends JLabel {
     public int getSelectedRowIndex() {
         return agendaTable.getSelectedRow();
     }
+
     public String[] getSelectedRowValues() {
         int selectedRow = agendaTable.getSelectedRow();
         if (selectedRow != -1) {

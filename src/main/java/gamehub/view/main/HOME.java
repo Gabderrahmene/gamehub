@@ -17,30 +17,31 @@ import javax.swing.JPanel;
  * @author abdel
  */
 public class HOME extends javax.swing.JFrame {
-   
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HOME.class.getName());
     private BufferedReader bf;
     private PrintWriter pw;
+
     /**
      * Creates new form reservation
      */
     public HOME() {
-    initComponents();
-    hebdo_ hebdo = new hebdo_ ();
-    reserv reser = new reserv ();
-    JPanel hebdo_ = (JPanel) hebdo.getContentPane();
-    JPanel reserv = (JPanel) reser.getContentPane();
-    
-    tab.addTab("hebdo", hebdo_);
-    tab.addTab("resv", reserv);
-    MFrame mframeWindow = new MFrame();
-    tab.addTab("frame", mframeWindow.getContentPane());
+        initComponents();
+        hebdo_ hebdo = new hebdo_();
+        reserv reser = new reserv();
+        JPanel hebdo_ = (JPanel) hebdo.getContentPane();
+        JPanel reserv = (JPanel) reser.getContentPane();
+
+        tab.addTab("hebdo", hebdo_);
+        tab.addTab("resv", reserv);
+        MFrame mframeWindow = new MFrame();
+        tab.addTab("frame", mframeWindow.getContentPane());
         try {
-            String po = new ClientHandle(User.bf,User.pw).get_posts("18:00-20:00");
+            String po = new ClientHandle(User.bf, User.pw).get_posts("18:00-20:00");
         } catch (IOException ex) {
             System.getLogger(HOME.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-    
+
     }
 
     /**

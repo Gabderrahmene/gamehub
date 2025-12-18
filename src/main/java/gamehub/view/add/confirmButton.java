@@ -10,7 +10,7 @@ import javax.swing.JButton;
  *
  * @author abdou
  */
-public class confirmButton extends JButton{
+public class confirmButton extends JButton {
 
     public confirmButton() {
         this.setBackground(new java.awt.Color(0, 0, 102));
@@ -18,5 +18,5 @@ public class confirmButton extends JButton{
         this.setForeground(new java.awt.Color(255, 255, 255));
         this.setText("confirmer");
     }
-    
+
 }
