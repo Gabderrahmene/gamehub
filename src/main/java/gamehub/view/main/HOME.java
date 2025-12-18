@@ -10,7 +10,11 @@ import gamehub.view.mensuel.MFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import raven.toast.Notifications;
 
 /**
  *
@@ -26,7 +30,14 @@ public class HOME extends javax.swing.JFrame {
      * Creates new form reservation
      */
     public HOME() {
+        try {
+            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+        } catch (UnsupportedLookAndFeelException ex) {
+            JOptionPane.showMessageDialog(null, ":(", "erreur de chargement du theme", JOptionPane.INFORMATION_MESSAGE);
+        }
         initComponents();
+        Notifications.getInstance().setJFrame(this);
+        Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_RIGHT,"bilal :D");
         hebdo_ hebdo = new hebdo_();
         reserv reser = new reserv();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();

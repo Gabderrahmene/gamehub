@@ -4,7 +4,6 @@
  */
 package gamehub.view.main;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import java.awt.Dimension;
