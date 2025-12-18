@@ -37,7 +37,7 @@ public class HOME extends javax.swing.JFrame {
         }
         initComponents();
         Notifications.getInstance().setJFrame(this);
-        Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_RIGHT,"bilal :D");
+        Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_RIGHT,"bilal ;D");
         hebdo_ hebdo = new hebdo_();
         reserv reser = new reserv();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();

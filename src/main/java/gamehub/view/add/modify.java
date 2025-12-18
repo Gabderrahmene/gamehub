@@ -218,7 +218,6 @@ public class modify extends javax.swing.JDialog {
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
         String[] pos = post.getSelection().split("\\.");
-        new ClientHandle(User.bf, User.pw).create_reserv(User.username, year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", pos[0]);
         dispose();
     }//GEN-LAST:event_confirmButton1ActionPerformed
 
