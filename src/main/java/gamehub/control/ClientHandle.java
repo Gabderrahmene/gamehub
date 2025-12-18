@@ -51,10 +51,12 @@ public class ClientHandle {
         pw.println(id_reserv);
 
     }
-        public void del_reserv(String id_reserv){
+        public String del_reserv(String id_user ,String date,  String post) throws IOException{
         pw.println("del_reserv");
-        pw.println(id_reserv);
-
+        pw.println(id_user);
+        pw.println(date);
+        pw.println(post);
+        return bf.readLine();
     }
     public String get_reserv(String username){
         try {
