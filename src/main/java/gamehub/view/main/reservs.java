@@ -88,18 +88,4 @@ public class reservs extends JLabel {
         return null;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Agenda Collaboratif Table Example");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            reservs tableView = new reservs();
-            frame.add(tableView);
-            frame.setPreferredSize(new Dimension(500, 300));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
-
 }

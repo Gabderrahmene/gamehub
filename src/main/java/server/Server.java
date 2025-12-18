@@ -22,30 +22,6 @@ public class Server extends Thread {
         this.Soc = Soc;
     }
 
-    public void update_groupes(String groupe, String[] users) {
-        for (String user : users) {
-            for (Client client : clients) {
-                if (user.equals(client.id_user)) {
-                    client.pw.println("listen_groupe");
-                    client.pw.println(groupe);
-                }
-            }
-        }
-
-    }
-
-    public void update_messages(String message, String[] users) {
-        for (String user : users) {
-            for (Client client : clients) {
-                if (user.equals(client.id_user)) {
-                    client.pw.println("listen_message");
-                    client.pw.println(message);
-                }
-            }
-        }
-
-    }
-
     @Override
     public void run() {
         try {
@@ -104,16 +80,7 @@ public class Server extends Thread {
                         String text = handle.get_posts(date);
                         pw.println(text);
                     }
-                    case "add_group" -> {
-                        String Title = bf.readLine();
-                        String ids = bf.readLine();
-                        String id_groupe = handle.add_group(Title, ids);
-                        String[] members = ids.split(",");
-                        for (String member : members) {
-                            handle.add_member(id_groupe, member);
-                        }
-                        update_groupes(id_groupe + ":" + Title, members);
-                    }
+                    
                     default ->
                         pw.println("-1");
                 }
