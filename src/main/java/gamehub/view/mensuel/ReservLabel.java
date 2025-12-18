@@ -16,11 +16,11 @@ import javax.swing.JLabel;
  *
  * @author abdou
  */
-public class eventLabel extends JLabel {
+public class ReservLabel extends JLabel {
 
     private String event;
 
-    public eventLabel(String event) {
+    public ReservLabel(String event) {
         this.setText(event);
         this.event = event;
         setFont(new Font("Arial", Font.BOLD, 10));

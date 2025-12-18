@@ -6,20 +6,11 @@ package gamehub.view.main;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
-import gamehub.view.mensuel.JourCellule;
-import gamehub.view.mensuel.eventLabel;
+import gamehub.view.mensuel.ReservLabel;
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Calendar;
 
 /**
  *
@@ -31,15 +22,9 @@ public class hebdo_ extends javax.swing.JFrame {
     private final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     public final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
     private JPanel gridPanel;
-    private JButton backwardButton;
-    private JButton nextButton;
-    // List to hold all the JPanels in the grid for easy access/looping
-    private List<JPanel> scheduleCells;
-    private JPanel scheduleGrid;
     /**
      * Creates new form hebdo_
      */
-    LocalDate currentDate = LocalDate.now();
     LocalDate Dat = LocalDate.now();
 
     public hebdo_() {
@@ -75,25 +60,6 @@ public class hebdo_ extends javax.swing.JFrame {
         // 7. Set the main panel as the view in the res JScrollPane
         res.setViewportView(mainPanel);
 
-    }
-
-    private List<String> parseReservations(String reservationData) {
-        List<String> appointments = new ArrayList<>();
-
-        if (reservationData != null && !reservationData.trim().isEmpty()) {
-            String[] lines = reservationData.split("\n");
-            for (String line : lines) {
-                appointments.add(line.trim());
-            }
-        }
-
-        // Fill remaining cells with empty strings
-        int totalCells = days.length * timeSlots.length;
-        while (appointments.size() < totalCells) {
-            appointments.add("");
-        }
-
-        return appointments;
     }
 
     /**
@@ -133,21 +99,24 @@ public class hebdo_ extends javax.swing.JFrame {
      */
     private JPanel createScheduleGrid() {
         gridPanel = new JPanel(new GridLayout(timeSlots.length, days.length));
-        scheduleCells = new ArrayList<>();
 
         int rows = timeSlots.length;
         int cols = days.length;
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                JPanel cellPanel = new JPanel(new BorderLayout());
-
+                JPanel cellPanel = new JPanel();
+                JScrollPane scrollPane = new JScrollPane();
+                cellPanel.setLayout(new BoxLayout(cellPanel, BoxLayout.Y_AXIS));
                 cellPanel.setBackground(Color.BLACK);
                 cellPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-                cellPanel.setPreferredSize(new Dimension(100, 50));
-
-                scheduleCells.add(cellPanel);
-                gridPanel.add(cellPanel);
+                scrollPane.setPreferredSize(new Dimension(100, 50));
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+                scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+                scrollPane.setViewportView(cellPanel);
+                gridPanel.add(scrollPane);
             }
         }
         return gridPanel;
@@ -165,7 +134,7 @@ public class hebdo_ extends javax.swing.JFrame {
     private void reservs(String date1) {
         // 1. Clear the grid before loading new data
         for (int i = 0; i < gridPanel.getComponentCount(); i++) {
-            JPanel cell = (JPanel) gridPanel.getComponent(i);
+            JPanel cell = (JPanel) ((JScrollPane) gridPanel.getComponent(i)).getViewport().getView();
             cell.removeAll();
             cell.revalidate();
             cell.repaint();
@@ -201,8 +170,8 @@ public class hebdo_ extends javax.swing.JFrame {
                     if (t != -1 && k >= 0 && k < 7) {
                         int place = (t * 7) + k;
                         if (place >= 0 && place < gridPanel.getComponentCount()) {
-                            JPanel aa = (JPanel) gridPanel.getComponent(place);
-                            aa.add(new eventLabel(post));
+                            JPanel aa = (JPanel) ((JScrollPane) gridPanel.getComponent(place)).getViewport().getView();
+                            aa.add(new ReservLabel(post));
                             aa.revalidate();
                             aa.repaint();
                         }
@@ -216,29 +185,6 @@ public class hebdo_ extends javax.swing.JFrame {
                     System.err.println("Error processing reservation: " + reservation);
                 }
             }
-        }
-    }
-
-    public void populateScheduleData(List<String> appointments) {
-        int maxIndex = Math.min(appointments.size(), scheduleCells.size());
-
-        for (int i = 0; i < maxIndex; i++) {
-            JPanel cell = scheduleCells.get(i);
-            String appointmentText = appointments.get(i);
-
-            cell.removeAll();
-
-            if (appointmentText != null && !appointmentText.trim().isEmpty()) {
-                JLabel contentLabel = new JLabel(appointmentText, SwingConstants.CENTER);
-                contentLabel.setForeground(Color.CYAN);
-                contentLabel.setToolTipText(appointmentText);
-                cell.add(contentLabel, BorderLayout.CENTER);
-                cell.setBackground(new Color(50, 50, 150));
-            } else {
-                cell.setBackground(Color.BLACK);
-            }
-            cell.revalidate();
-            cell.repaint();
         }
     }
 

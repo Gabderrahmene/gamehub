@@ -52,7 +52,7 @@ public class JourCellule extends JScrollPane {
 
     public void addEvent(String tex) {
         panel.add(Box.createVerticalStrut(5));
-        panel.add(new eventLabel(tex));
+        panel.add(new ReservLabel(tex));
 
         panel.revalidate();
         panel.repaint();
