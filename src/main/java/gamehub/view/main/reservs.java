@@ -9,12 +9,15 @@ import gamehub.models.User;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  *
  * @author abdel
  */
-public class reservs extends JLabel {
+public class reservs extends JLabel implements ActionListener {
 
     private JTable agendaTable;
     private DefaultTableModel tableModel;
@@ -42,7 +45,12 @@ public class reservs extends JLabel {
         // Optional: Set table appearance to better match the screenshot
         agendaTable.setFillsViewportHeight(true); // Makes the table fill the height
         agendaTable.setRowHeight(25); // Set a pleasant row height
-
+        agendaTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent evt) {
+            reservsMousePressed(evt);
+        }
+    });
         // 4. Wrap the JTable in a JScrollPane
         // The JScrollPane ensures the table headers are visible and scrolling works.
         JScrollPane scrollPane = new JScrollPane(agendaTable);
@@ -72,10 +80,30 @@ public class reservs extends JLabel {
         Object[] rowData = {titre, date, responsable};
         tableModel.addRow(rowData);
     }
+    private void reservsMousePressed(java.awt.event.MouseEvent evt) {
+       if (SwingUtilities.isRightMouseButton(evt)) {
+        int row = agendaTable.rowAtPoint(evt.getPoint());
+        
+        if (row >= 0) {
+            agendaTable.setRowSelectionInterval(row, row);
+            JPopupMenu pop = new JPopupMenu();
+            JMenuItem item1 = new JMenuItem("modify");
+            item1.addActionListener((ActionListener) this);
+            item1.setActionCommand("modify");
+            pop.add(item1);
+            JMenuItem item2 = new JMenuItem("delete");
+            item2.addActionListener((ActionListener) this);
+            item2.setActionCommand("delete");
+            pop.add(item2);
+            pop.show(agendaTable,  evt.getX(), evt.getY());
+        }
+    }}
 
     public int getSelectedRowIndex() {
         return agendaTable.getSelectedRow();
+        
     }
+    
 
     public String[] getSelectedRowValues() {
         int selectedRow = agendaTable.getSelectedRow();
@@ -87,5 +115,43 @@ public class reservs extends JLabel {
         }
         return null;
     }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch(command){
+            case "delete":
+                String inf[] = getSelectedRowValues();
+                int confirm = JOptionPane.showConfirmDialog(this,
+                    "Delete this reservation?\n\n"
+                    + "POST: " + inf[0] + "\n"
+                    + "DATE: " + inf[1],
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION);
 
-}
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, inf[1], inf[0]);
+                        if (!tt.equals("-1")) {
+                            JOptionPane.showMessageDialog(this,
+                                "Reservation deleted successfully!",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                "Failed to delete reservation.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                break;
+                case "modify":
+        }
+            
+    }}
+      
+    
+
+

@@ -190,11 +190,11 @@ public class ServerHandle {
 
     }
 
-    public String modify_reserv(String id_reserv, String date, String post) {
+    public String modify_reserv(String id_user, String date, String post) {
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("UPDATE reserv SET post = " + post + ", date= " + date + "WHERE id_reserv = " + id_reserv + ";")) {
+                try (ResultSet rs = stmt.executeQuery("UPDATE reserv SET post = " + post + ", date= " + date + "WHERE id_reserv = " + id_user + ";")) {
                     String res = "";
                     while (rs.next()) {
                         res += rs.getString("id_user") + "," + rs.getString("username") + "," + rs.getString("content") + ":";

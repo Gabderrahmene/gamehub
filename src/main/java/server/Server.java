@@ -63,7 +63,15 @@ public class Server extends Thread {
                         String post = bf.readLine();
                         String text = handle.del_reserv(id, date, post);
                         pw.println(text);
+                    } 
+                    case "modify_reserv" -> {
+                        String id = bf.readLine();
+                        String date = bf.readLine();
+                        String post = bf.readLine();
+                        String text = handle.del_reserv(id, date, post);
+                        pw.println(text);
                     }
+                    
                     case "get_reserv" -> {
                         String username = bf.readLine();
                         String reservs = handle.get_reserv(username);
