@@ -358,16 +358,12 @@ public class ServerHandle {
         }
 }
 
-     public String del_reserv(String id_reserv){
+     public String del_reserv(String id_user,String date ,String post){
         try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
             // create a Statement
             try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("DELETE FROM reserv WHERE id_reserv ="+id_reserv)) {
-                    String res = "";
-                    while (rs.next()) {
-                        res+=rs.getString("id_user")+","+rs.getString("username")+","+rs.getString("content")+":";
-                }
-                    return res;
+                try (ResultSet rs = stmt.executeQuery("DELETE r FROM reserv r INNER JOIN post p ON r.id_post = p.id_post WHERE r.id_client = '" + id_user + "' AND p.post_name = '" + post + "' AND r.date = '" + date + "';")) {
+                    return "1";
                 } catch (SQLException ex) {
                     System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                     return "-1";

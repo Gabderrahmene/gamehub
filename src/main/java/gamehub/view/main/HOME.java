@@ -6,6 +6,7 @@ package gamehub.view.main;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.view.mensuel.MFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,8 +30,11 @@ public class HOME extends javax.swing.JFrame {
     reserv reser = new reserv ();
     JPanel hebdo_ = (JPanel) hebdo.getContentPane();
     JPanel reserv = (JPanel) reser.getContentPane();
+    
     tab.addTab("hebdo", hebdo_);
     tab.addTab("resv", reserv);
+    MFrame mframeWindow = new MFrame();
+    tab.addTab("frame", mframeWindow.getContentPane());
         try {
             String po = new ClientHandle(User.bf,User.pw).get_posts("18:00-20:00");
         } catch (IOException ex) {
