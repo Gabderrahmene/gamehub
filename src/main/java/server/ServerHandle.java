@@ -190,28 +190,14 @@ public class ServerHandle {
 
     }
 
-    public String modify_reserv(String id_user, String date, String post) {
-        try (Connection conn = DriverManager.getConnection(System.getenv("game_hubBaseUrl"), "root", null)) {
-            // create a Statement
-            try (Statement stmt = conn.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery("UPDATE reserv SET post = " + post + ", date= " + date + "WHERE id_reserv = " + id_user + ";")) {
-                    String res = "";
-                    while (rs.next()) {
-                        res += rs.getString("id_user") + "," + rs.getString("username") + "," + rs.getString("content") + ":";
-                    }
-                    return res;
-                } catch (SQLException ex) {
-                    System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                    return "-1";
-                }
-            } catch (SQLException ex) {
-                System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                return "-1";
-            }
-        } catch (SQLException ex) {
-            System.getLogger(ServerHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    public String modify_reserv(String id_user, String odate, String opost, String date, String post) {
+         String cr = create_reserv(id_user,date,post);
+        if(!cr.equals("-1")){
+            del_reserv(id_user,odate,opost);
+        }else{
             return "-1";
         }
+        return "1";
     }
 
     public String del_reserv(String id_user, String date, String post) {

@@ -51,9 +51,11 @@ public class ClientHandle {
 
     }
 
-    public void modify_reserv(String id_user, String date, String post) {
+    public void modify_reserv(String id_user, String odate, String opost, String date, String post) {
         pw.println("modify_reserv");
         pw.println(id_user);
+        pw.println(odate);
+        pw.println(opost);
         pw.println(date);
         pw.println(post);
 

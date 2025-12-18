@@ -19,8 +19,10 @@ public class modify extends javax.swing.JDialog {
     /**
      * Creates new form add_
      */
-    public modify(java.awt.Frame parent, boolean modal) {
+     private String blbl[];
+    public modify(java.awt.Frame parent, boolean modal,String blbl[]) { 
         super(parent, modal);
+        this.blbl = blbl;
         initComponents();
         warning1.setVisible(false);
         confirmButton1.setEnabled(false);
@@ -218,6 +220,7 @@ public class modify extends javax.swing.JDialog {
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
         String[] pos = post.getSelection().split("\\.");
+        new ClientHandle(User.bf, User.pw).modify_reserv(User.username, blbl[1],blbl[0],year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", pos[0]);
         dispose();
     }//GEN-LAST:event_confirmButton1ActionPerformed
 

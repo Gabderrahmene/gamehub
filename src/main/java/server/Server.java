@@ -66,9 +66,11 @@ public class Server extends Thread {
                     } 
                     case "modify_reserv" -> {
                         String id = bf.readLine();
+                        String odate = bf.readLine();
+                        String opost = bf.readLine();
                         String date = bf.readLine();
                         String post = bf.readLine();
-                        String text = handle.del_reserv(id, date, post);
+                        String text = handle.modify_reserv(id, odate, opost, date, post);
                         pw.println(text);
                     }
                     

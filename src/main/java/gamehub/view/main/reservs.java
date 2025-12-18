@@ -6,12 +6,13 @@ package gamehub.view.main;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import gamehub.view.add.modify;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -118,9 +119,9 @@ public class reservs extends JLabel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
+        String inf[] = getSelectedRowValues();
         switch(command){
             case "delete":
-                String inf[] = getSelectedRowValues();
                 int confirm = JOptionPane.showConfirmDialog(this,
                     "Delete this reservation?\n\n"
                     + "POST: " + inf[0] + "\n"
@@ -148,6 +149,10 @@ public class reservs extends JLabel implements ActionListener {
                 }
                 break;
                 case "modify":
+                            
+                             modify addReserv = new modify(null, true,inf);
+                            addReserv.setVisible(true);
+                            
         }
             
     }}
