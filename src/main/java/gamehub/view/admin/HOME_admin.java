@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gamehub.view.main;
+package gamehub.view.admin;
 
+import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.mensuel.MFrame;
@@ -20,28 +21,22 @@ import raven.toast.Notifications;
  *
  * @author abdel
  */
-public class HOME extends javax.swing.JFrame {
+public class HOME_admin extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HOME.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HOME_admin.class.getName());
     private BufferedReader bf;
     private PrintWriter pw;
 
     /**
      * Creates new form reservation
      */
-    public HOME() {
+    public HOME_admin() {
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
         } catch (UnsupportedLookAndFeelException ex) {
             JOptionPane.showMessageDialog(null, ":(", "erreur de chargement du theme", JOptionPane.INFORMATION_MESSAGE);
         }
         initComponents();
-        tab.setBackground(new java.awt.Color(0, 0, 51)); 
-    
-
-    tab.putClientProperty("JTabbedPane.contentAreaColor", new java.awt.Color(0, 0, 51));
-
-    tab.setOpaque(true);
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
         hebdo_ hebdo = new hebdo_();
@@ -53,15 +48,7 @@ public class HOME extends javax.swing.JFrame {
         tab.addTab("resv", reserv);
         MFrame mframeWindow = new MFrame();
         tab.addTab("frame", mframeWindow.getContentPane());
-        hebdo_.setOpaque(false);
-reserv.setOpaque(false);
 
-JPanel content = (JPanel) mframeWindow.getContentPane();
-
-content.setBackground(new java.awt.Color(0, 0, 51));
-
-tab.addTab("frame", content);
-tab.putClientProperty("JTabbedPane.contentAreaColor", new java.awt.Color(0, 0, 51));
     }
 
     /**
@@ -77,8 +64,6 @@ tab.putClientProperty("JTabbedPane.contentAreaColor", new java.awt.Color(0, 0, 5
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 0, 102));
-
-        tab.setBackground(new java.awt.Color(0, 0, 102));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

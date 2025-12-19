@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gamehub.view.main;
+package gamehub.view.admin;
 
+import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.add.modify;
@@ -22,14 +23,14 @@ import raven.toast.Notifications;
  *
  * @author abdel
  */
-public class reservs extends JLabel implements ActionListener {
+public class reservs_admin extends JLabel implements ActionListener {
     private JTable agendaTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
     private TableRowSorter<DefaultTableModel> rowSorter;
     Color purple_dark = new Color(51,0,102);
     Color dark_blue= new Color(0,0,51);
-    public reservs() {
+    public reservs_admin() {
        setLayout(new BorderLayout());
 
     String[] columnNames = {"POST", "DATE", "USER"};

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gamehub.view.main;
+package gamehub.view.admin;
 
+import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.add.AddGlobal;
@@ -15,17 +16,17 @@ import raven.toast.Notifications;
  *
  * @author abdel
  */
-public class reserv extends javax.swing.JFrame {
+public class reserv_admin extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(reserv.class.getName());
-    private reservs tableViewComponent;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(reserv_admin.class.getName());
+    private reservs_admin tableViewComponent;
 
     /**
      * Creates new form reserv
      */
-    public reserv() {
+    public reserv_admin() {
         initComponents();
-        tableViewComponent = new reservs();
+        tableViewComponent = new reservs_admin();
 
 
         res.setViewportView(tableViewComponent);
@@ -36,7 +37,7 @@ public class reserv extends javax.swing.JFrame {
 
     private void openAgendaWindow() {
         JFrame agendaFrame = new JFrame("Agenda CollaborativeT - List of Events");
-        agendaFrame.setContentPane(new reservs()); // or however you're adding it
+        agendaFrame.setContentPane(new reservs_admin()); // or however you're adding it
 
         agendaFrame.pack();  
 
