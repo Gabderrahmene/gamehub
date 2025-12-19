@@ -39,8 +39,8 @@ public class HOME_admin extends javax.swing.JFrame {
         initComponents();
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
-        hebdo_ hebdo = new hebdo_();
-        reserv reser = new reserv();
+        hebdo_ hebdo = new hebdo_admin();
+        reserv reser = new reserv_admin();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();
         JPanel reserv = (JPanel) reser.getContentPane();
 

@@ -6,6 +6,7 @@ package gamehub.view.main;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.view.admin.HOME_admin;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -262,9 +263,8 @@ public class login extends javax.swing.JFrame {
                                 User user = new User(id, this.pw, this.bf);
                 PrintWriter pw = User.pw;
                 if(id.equals("admin")){
-                    
+                  new HOME_admin().setVisible(true);  
                 }else{
-
                 new HOME().setVisible(true);
                 dispose();
                 }
