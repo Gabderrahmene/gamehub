@@ -4,7 +4,10 @@
  */
 package gamehub.view.mensuel;
 
+import gamehub.control.ClientHandle;
+import gamehub.models.User;
 import java.awt.Component;
+import java.util.Arrays;
 import java.util.Calendar;
 import javax.swing.JLabel;
 
@@ -31,14 +34,30 @@ public class Mensuel extends javax.swing.JPanel {
         calendar.set(Calendar.DATE, 1);
         int startDat = calendar.get(Calendar.DAY_OF_WEEK);
         calendar.add(Calendar.DATE, -startDat);
+        String tt = new ClientHandle(User.bf, User.pw).get_reserv_mon(User.username, calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1)+ "-" + calendar.get(Calendar.DATE));
+        System.out.println(calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DATE));
+        String[] t = tt.split("/");
         for (Component com : getComponents()) {
             if (com.getClass().getSimpleName().equals("JourCellule")) {
                 JourCellule ce = (JourCellule) com;
+
                 ce.resetEvent();
                 ce.setLabel(calendar.get(Calendar.DATE) + "");
                 ce.setDate(calendar.getTime());
                 ce.currentMonth(calendar.get(Calendar.MONTH) == month - 1);
-                ce.addEvent("ana samaka");
+                if(!tt.isBlank()){
+                    for (String i : t) {
+                    String post = i.split(",")[0];
+                    String date = i.split(",")[1];
+                    date = date.split(" ")[0];
+                    String[] comp = date.split("-");
+                    if (Integer.parseInt(comp[2]) == (calendar.get(Calendar.DATE)) &&Integer.parseInt(comp[1]) == (calendar.get(Calendar.MONTH)+1) && Integer.parseInt(comp[0]) == (calendar.get(Calendar.YEAR))) {
+                        ce.addEvent(post);
+                    }
+
+                }
+                }
+                
                 calendar.add(Calendar.DATE, 1);
             }
         }

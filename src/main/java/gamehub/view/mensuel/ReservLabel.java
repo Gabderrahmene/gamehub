@@ -44,12 +44,10 @@ public class ReservLabel extends JLabel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // When mouse is pressed on the label
                 isBeingDragged = true;
                 dragOffsetX = e.getX();
                 dragOffsetY = e.getY();
                 
-                // Make the label semi-transparent while dragging
                 setBackground(new Color(97, 49, 237, 150));
                 repaint();
             }
@@ -64,7 +62,6 @@ public class ReservLabel extends JLabel {
         });
     }
     
-    // Getters for drag information
     public boolean isBeingDragged() {
         return isBeingDragged;
     }
