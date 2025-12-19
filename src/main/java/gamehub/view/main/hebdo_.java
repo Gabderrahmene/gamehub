@@ -1,34 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gamehub.view.main;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.view.add.modify;
 import gamehub.view.mensuel.ReservLabel;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import raven.toast.Notifications;
 
-/**
- *
- * @author abdel
- */
 public class hebdo_ extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(hebdo_.class.getName());
     private final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     public final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
     private JPanel gridPanel;
-    /**
-     * Creates new form hebdo_
-     */
+    private ReservLabel currentlyDragging = null;
+    private JPanel sourceCell = null;
+
     LocalDate Dat = LocalDate.now();
 
     public hebdo_() {
         initComponents();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate weekEnd = Dat.plusDays(6);
+        week.setText(Dat.format(formatter) + " -> " + weekEnd.format(formatter));
 
         // 1. Create the Header Panel (Days of the week)
         JPanel headerPanel = createHeaderPanel();
@@ -60,11 +63,10 @@ public class hebdo_ extends javax.swing.JFrame {
         // 7. Set the main panel as the view in the res JScrollPane
         res.setViewportView(mainPanel);
 
+        // 8. Load initial reservations
+        reservs(Dat.format(formatter));
     }
 
-    /**
-     * Creates the JPanel for the day labels (Sun, Mon, Tue, etc.)
-     */
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new GridLayout(1, days.length));
         panel.setPreferredSize(new Dimension(800, 30));
@@ -78,9 +80,6 @@ public class hebdo_ extends javax.swing.JFrame {
         return panel;
     }
 
-    /**
-     * Creates the JPanel for the time labels (10:00-12:00, etc.)
-     */
     private JPanel createTimeLabelPanel() {
         JPanel panel = new JPanel(new GridLayout(timeSlots.length, 1));
 
@@ -93,10 +92,6 @@ public class hebdo_ extends javax.swing.JFrame {
         return panel;
     }
 
-    /**
-     * Creates the main grid of schedule cells. All cells are stored in the
-     * 'scheduleCells' list.
-     */
     private JPanel createScheduleGrid() {
         gridPanel = new JPanel(new GridLayout(timeSlots.length, days.length));
 
@@ -105,11 +100,20 @@ public class hebdo_ extends javax.swing.JFrame {
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                JPanel cellPanel = new JPanel();
+                final JPanel cellPanel = new JPanel();
                 JScrollPane scrollPane = new JScrollPane();
                 cellPanel.setLayout(new BoxLayout(cellPanel, BoxLayout.Y_AXIS));
                 cellPanel.setBackground(Color.BLACK);
                 cellPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+
+                // Add drop listener to each cell
+                cellPanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        handleDrop(cellPanel);
+                    }
+                });
+
                 scrollPane.setPreferredSize(new Dimension(100, 50));
                 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -119,20 +123,120 @@ public class hebdo_ extends javax.swing.JFrame {
                 gridPanel.add(scrollPane);
             }
         }
+
+        // Add mouse listeners to the grid panel for cleanup
+        gridPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // If released on grid panel (not on a cell), cancel the drag
+                if (currentlyDragging != null) {
+                    // Reset the label's appearance
+                    currentlyDragging.setBackground(new Color(97, 49, 237));
+                    currentlyDragging.repaint();
+                    currentlyDragging = null;
+                    sourceCell = null;
+                }
+            }
+        });
+
         return gridPanel;
     }
 
-    /**
-     * Creates the panel for the Forward and Next buttons.
-     */
     private JPanel createNavigationPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         return panel;
+    }
 
+    private void setupLabelDrag(ReservLabel label) {
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Start dragging this label
+                currentlyDragging = label;
+                sourceCell = (JPanel) label.getParent();
+
+                // Mark the label as being dragged (make it semi-transparent)
+                label.setBackground(new Color(97, 49, 237, 150));
+                label.repaint();
+            }
+        });
+    }
+
+    private void handleDrop(JPanel targetCell) {
+        if (currentlyDragging == null || targetCell == null) {
+            return;
+        }
+
+        // Don't do anything if dropping on the same cell
+        if (targetCell == sourceCell) {
+            // Reset the label's appearance
+            currentlyDragging.setBackground(new Color(97, 49, 237));
+            currentlyDragging.repaint();
+            currentlyDragging = null;
+            sourceCell = null;
+            return;
+        }
+        int OldI = -1;
+        int OldY = -1;
+        int NewI = -1;
+        int NewY = -1;
+        for (int i = 0; i < gridPanel.getComponentCount(); i++) {
+            JPanel cell = (JPanel) ((JScrollPane) gridPanel.getComponent(i)).getViewport().getView();
+            if (cell == sourceCell) {
+                OldI = i%7;
+                OldY = i/7;
+            }
+            if (cell == targetCell) {
+                NewI = i%7;
+                NewY = i/7;
+            }
+
+        }
+        if (OldI == -1 || OldY == -1 || NewI == -1 || NewY == -1) {
+            currentlyDragging = null;
+            sourceCell = null;
+            return;
+        }
+        String parts = ((String) currentlyDragging.getEvent());
+        String lastPart = "1";
+        Pattern pattern = Pattern.compile("\\d+$"); // Matches digits at end
+        Matcher matcher = pattern.matcher(parts);
+        
+        if (matcher.find()) {
+            lastPart= matcher.group();
+        }
+        ReservLabel newLabel = new ReservLabel(currentlyDragging.getEvent());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        setupLabelDrag(newLabel);
+        System.out.println( (String) Dat.plusDays(OldI).format(formatter) + " " + timeSlots[OldY].split("-")[0]+":00");
+        String bres = new ClientHandle(User.bf, User.pw).modify_reserv(User.username, (String) Dat.plusDays(OldI).format(formatter) + " " + timeSlots[OldY].split("-")[0]+":00", parts, (String) Dat.plusDays(NewI).format(formatter) + " " + timeSlots[NewY].split("-")[0]+":00",lastPart);
+        if (bres.equals("-1")) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+            currentlyDragging = null;
+            sourceCell = null;
+            return;
+        } else {
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+
+        }
+        // Add the new label to the target cell
+        targetCell.add(newLabel);
+        targetCell.revalidate();
+        targetCell.repaint();
+
+        if (sourceCell != null) {
+            sourceCell.remove(currentlyDragging);
+            sourceCell.revalidate();
+            sourceCell.repaint();
+        }
+
+        // Reset dragging state
+        currentlyDragging = null;
+        sourceCell = null;
     }
 
     private void reservs(String date1) {
-        // 1. Clear the grid before loading new data
+        // Clear the grid
         for (int i = 0; i < gridPanel.getComponentCount(); i++) {
             JPanel cell = (JPanel) ((JScrollPane) gridPanel.getComponent(i)).getViewport().getView();
             cell.removeAll();
@@ -171,15 +275,12 @@ public class hebdo_ extends javax.swing.JFrame {
                         int place = (t * 7) + k;
                         if (place >= 0 && place < gridPanel.getComponentCount()) {
                             JPanel aa = (JPanel) ((JScrollPane) gridPanel.getComponent(place)).getViewport().getView();
-                            aa.add(new ReservLabel(post));
+                            ReservLabel label = new ReservLabel(post);
+                            setupLabelDrag(label);
+                            aa.add(label);
                             aa.revalidate();
                             aa.repaint();
                         }
-                        System.out.println("Processing: " + post);
-                        System.out.println("  -> Date Found: " + resDate + " | Week Start: " + weekStartDate);
-                        System.out.println("  -> Days Diff (k): " + k);
-                        System.out.println("  -> Time Found: [" + timeFromDB + "]");
-                        System.out.println("  -> Row Index (t): " + t);
                     }
                 } catch (Exception e) {
                     System.err.println("Error processing reservation: " + reservation);
@@ -188,11 +289,6 @@ public class hebdo_ extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
