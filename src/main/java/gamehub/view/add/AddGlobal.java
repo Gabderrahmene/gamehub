@@ -217,8 +217,8 @@ public class AddGlobal extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButton1ActionPerformed
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
-        String[] pos = post.getSelection().split("\\.");
-        new ClientHandle(User.bf, User.pw).create_reserv(User.username, year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", pos[0]);
+
+        new ClientHandle(User.bf, User.pw).create_reserv(User.username, year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", post.getSelection());
         dispose();
     }//GEN-LAST:event_confirmButton1ActionPerformed
 
@@ -237,7 +237,6 @@ public class AddGlobal extends javax.swing.JDialog {
     private void postActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postActionPerformed
         confirmButton1.setEnabled(true);
     }//GEN-LAST:event_postActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private gamehub.view.add.cancelButton cancelButton1;

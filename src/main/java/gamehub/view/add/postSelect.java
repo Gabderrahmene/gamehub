@@ -4,6 +4,7 @@
  */
 package gamehub.view.add;
 
+import gamehub.models.post;
 import javax.swing.JComboBox;
 
 /**
@@ -21,11 +22,12 @@ public class postSelect extends JComboBox {
 
     public String getSelection() {
 
-        return (String) this.getSelectedItem();
+        return ((post) this.getSelectedItem()).getId();
 
     }
 
     public void addPost(String post) {
-        this.addItem(post);
+        String[] p = post.split("\\.");
+        this.addItem(new post(p[0], p[1]));
     }
 }

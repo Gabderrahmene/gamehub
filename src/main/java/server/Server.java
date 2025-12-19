@@ -63,7 +63,7 @@ public class Server extends Thread {
                         String post = bf.readLine();
                         String text = handle.del_reserv(id, date, post);
                         pw.println(text);
-                    } 
+                    }
                     case "modify_reserv" -> {
                         String id = bf.readLine();
                         String odate = bf.readLine();
@@ -73,7 +73,7 @@ public class Server extends Thread {
                         String text = handle.modify_reserv(id, odate, opost, date, post);
                         pw.println(text);
                     }
-                    
+
                     case "get_reserv" -> {
                         String username = bf.readLine();
                         String reservs = handle.get_reserv(username);
@@ -90,7 +90,7 @@ public class Server extends Thread {
                         String text = handle.get_posts(date);
                         pw.println(text);
                     }
-                    
+
                     default ->
                         pw.println("-1");
                 }

@@ -191,10 +191,10 @@ public class ServerHandle {
     }
 
     public String modify_reserv(String id_user, String odate, String opost, String date, String post) {
-         String cr = create_reserv(id_user,date,post);
-        if(!cr.equals("-1")){
-            del_reserv(id_user,odate,opost);
-        }else{
+        String cr = create_reserv(id_user, date, post);
+        if (!cr.equals("-1")) {
+            del_reserv(id_user, odate, opost);
+        } else {
             return "-1";
         }
         return "1";

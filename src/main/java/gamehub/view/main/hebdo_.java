@@ -272,7 +272,6 @@ public class hebdo_ extends javax.swing.JFrame {
         System.out.println("prec week " + Dat);
     }//GEN-LAST:event_backActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
     private javax.swing.JButton next;

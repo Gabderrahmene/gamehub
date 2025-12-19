@@ -37,7 +37,7 @@ public class HOME extends javax.swing.JFrame {
         }
         initComponents();
         Notifications.getInstance().setJFrame(this);
-        Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_RIGHT,"bilal ;D");
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
         hebdo_ hebdo = new hebdo_();
         reserv reser = new reserv();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();
@@ -47,11 +47,6 @@ public class HOME extends javax.swing.JFrame {
         tab.addTab("resv", reserv);
         MFrame mframeWindow = new MFrame();
         tab.addTab("frame", mframeWindow.getContentPane());
-        try {
-            String po = new ClientHandle(User.bf, User.pw).get_posts("18:00-20:00");
-        } catch (IOException ex) {
-            System.getLogger(HOME.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
 
     }
 
@@ -88,7 +83,6 @@ public class HOME extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane tab;
