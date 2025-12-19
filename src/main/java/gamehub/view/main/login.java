@@ -259,10 +259,15 @@ public class login extends javax.swing.JFrame {
 
             String id = new ClientHandle(this.bf, this.pw).login(username.getText(), new String(password.getPassword()));
             if (!id.equals("-1")) {
-                User user = new User(id, this.pw, this.bf);
+                                User user = new User(id, this.pw, this.bf);
                 PrintWriter pw = User.pw;
+                if(id.equals("admin")){
+                    
+                }else{
+
                 new HOME().setVisible(true);
                 dispose();
+                }
             }
         } else {
             if (username.getText().isBlank()) {

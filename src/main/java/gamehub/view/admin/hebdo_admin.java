@@ -1,5 +1,6 @@
-package gamehub.view.main;
+package gamehub.view.admin;
 
+import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.add.modify;
@@ -15,9 +16,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import raven.toast.Notifications;
 
-public class hebdo_ extends javax.swing.JFrame {
+public class hebdo_admin extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(hebdo_.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(hebdo_admin.class.getName());
     private final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     public final String[] timeSlots = {"10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00", "20:00-22:00"};
     private JPanel gridPanel;
@@ -26,7 +27,7 @@ public class hebdo_ extends javax.swing.JFrame {
     Color purple_dark = new Color(51,0,102);
     LocalDate Dat = LocalDate.now();
 
-    public hebdo_() {
+    public hebdo_admin() {
         initComponents();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

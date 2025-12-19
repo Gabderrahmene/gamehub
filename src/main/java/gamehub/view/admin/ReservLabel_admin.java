@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gamehub.view.mensuel;
+package gamehub.view.admin;
 
+import gamehub.view.mensuel.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,14 +22,14 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
  *
  * @author abdou
  */
-public class ReservLabel extends JLabel {
+public class ReservLabel_admin extends JLabel {
     
     private String event;
     private MouseHandler mouseHandler;
     private int dragOffsetX, dragOffsetY;
     private boolean isBeingDragged = false;
     
-    public ReservLabel(String event) {
+    public ReservLabel_admin(String event) {
         this.setText(event);
         this.event = event;
         setFont(new Font("Arial", Font.BOLD, 10));
@@ -44,10 +45,12 @@ public class ReservLabel extends JLabel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                // When mouse is pressed on the label
                 isBeingDragged = true;
                 dragOffsetX = e.getX();
                 dragOffsetY = e.getY();
                 
+                // Make the label semi-transparent while dragging
                 setBackground(new Color(97, 49, 237, 150));
                 repaint();
             }
@@ -61,6 +64,7 @@ public class ReservLabel extends JLabel {
         });
     }
     
+    // Getters for drag information
     public boolean isBeingDragged() {
         return isBeingDragged;
     }
