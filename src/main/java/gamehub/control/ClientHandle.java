@@ -106,6 +106,17 @@ public class ClientHandle {
         }
         return "-1";
     }
+    public String get_reserv_mon(String username, String date) {
+        try {
+            pw.println("get_reserv_mon");
+            pw.println(username);
+            pw.println(date);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
+    }
 
     public String get_posts(String date) throws IOException {
         pw.println("get_posts");

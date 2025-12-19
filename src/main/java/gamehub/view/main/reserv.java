@@ -7,7 +7,6 @@ package gamehub.view.main;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.add.AddGlobal;
-import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import raven.toast.Notifications;
@@ -122,9 +121,11 @@ public class reserv extends javax.swing.JFrame {
         if (res == null) {
 
         } else if (res.equals("-1")) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la creation");
         } else {
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "creation reussis");
+            String[] nr= res.split(",");
+            tableViewComponent.addPostRow(nr[1],nr[0],"vous");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -153,9 +154,10 @@ public class reserv extends javax.swing.JFrame {
                 if (tt == null) {
 
                 } else if (tt.equals("-1")) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la suppression");
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "suppression reussis");
+                    tableViewComponent.supPostRow();
                 }
             }
         } else {

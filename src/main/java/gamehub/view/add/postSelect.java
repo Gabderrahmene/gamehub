@@ -25,6 +25,11 @@ public class postSelect extends JComboBox {
         return ((post) this.getSelectedItem()).getId();
 
     }
+    public String getNam() {
+
+        return ((post) this.getSelectedItem()).getName();
+
+    }
 
     public void addPost(String post) {
         String[] p = post.split("\\.");

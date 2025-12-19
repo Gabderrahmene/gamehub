@@ -40,7 +40,7 @@ public class addHebdo extends javax.swing.JDialog {
         } else if (res.equals("-1")) {
             return "-1";
         } else {
-            return date + "-" + hour + "-" + post.getSelection();
+            return date + " " + hour + "," + post.getNam();
         }
     }
 

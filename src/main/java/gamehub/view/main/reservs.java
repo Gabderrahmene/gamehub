@@ -82,7 +82,9 @@ public class reservs extends JLabel implements ActionListener {
         Object[] rowData = {titre, date, responsable};
         tableModel.addRow(rowData);
     }
-
+    public void supPostRow() {
+        tableModel.removeRow(agendaTable.getSelectedRow());
+    }
     private void reservsMousePressed(java.awt.event.MouseEvent evt) {
         if (SwingUtilities.isRightMouseButton(evt)) {
             int row = agendaTable.rowAtPoint(evt.getPoint());
@@ -137,9 +139,10 @@ public class reservs extends JLabel implements ActionListener {
                     if (tt == null) {
 
                     } else if (tt.equals("-1")) {
-                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la suppression");
                     } else {
-                        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+                        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "suppression reussis");
+                        supPostRow();
                     }
                 }
                 break;
@@ -155,6 +158,10 @@ public class reservs extends JLabel implements ActionListener {
                     Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
                 } else {
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+                    supPostRow();
+                    String[] nr= res.split(",");
+                    addPostRow(nr[1],nr[0],"vous");
+                    
                 }
 
         }

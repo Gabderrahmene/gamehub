@@ -38,7 +38,7 @@ public class modify extends javax.swing.JDialog {
         } else if (res.equals("-1")) {
             return "-1";
         } else {
-            return year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + "-" + hour.getSelection() + "-" + post.getSelection();
+            return year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + "," + post.getNam();
         }
     }
 
