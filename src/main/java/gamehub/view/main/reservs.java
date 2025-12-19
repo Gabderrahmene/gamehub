@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 
 /**
  *
@@ -132,21 +133,13 @@ public class reservs extends JLabel implements ActionListener {
                         JOptionPane.YES_NO_OPTION);
 
                 if (confirm == JOptionPane.YES_OPTION) {
-                    try {
-                        String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, inf[1], inf[0]);
-                        if (!tt.equals("-1")) {
-                            JOptionPane.showMessageDialog(this,
-                                    "Reservation deleted successfully!",
-                                    "Success",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(this,
-                                    "Failed to delete reservation.",
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, inf[1], inf[0]);
+                    if (tt == null) {
+
+                    } else if (tt.equals("-1")) {
+                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
                     }
                 }
                 break;
@@ -154,6 +147,15 @@ public class reservs extends JLabel implements ActionListener {
 
                 modify addReserv = new modify(null, true, inf);
                 addReserv.setVisible(true);
+                String res = addReserv.getRes();
+                addReserv.dispose();
+                if (res == null) {
+
+                } else if (res.equals("-1")) {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+                }
 
         }
 

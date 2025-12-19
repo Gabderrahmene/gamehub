@@ -56,6 +56,7 @@ public class Server extends Thread {
                         String date = bf.readLine();
                         String post = bf.readLine();
                         String username = handle.create_reserv(id_user, date, post);
+                        pw.println(username);
                     }
                     case "del_reserv" -> {
                         String id = bf.readLine();

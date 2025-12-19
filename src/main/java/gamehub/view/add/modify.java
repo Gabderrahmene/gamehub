@@ -15,7 +15,7 @@ import java.io.IOException;
 public class modify extends javax.swing.JDialog {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(modify.class.getName());
-
+    public String res;
     /**
      * Creates new form add_
      */
@@ -29,6 +29,17 @@ public class modify extends javax.swing.JDialog {
         confirmButton1.setEnabled(false);
         post.removeAllItems();
         posts();
+        res = null;
+    }
+
+    public String getRes() {
+        if (res == null) {
+            return null;
+        } else if (res.equals("-1")) {
+            return "-1";
+        } else {
+            return year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + "-" + hour.getSelection() + "-" + post.getSelection();
+        }
     }
 
     public void posts() {
@@ -216,13 +227,13 @@ public class modify extends javax.swing.JDialog {
     }//GEN-LAST:event_dayActionPerformed
 
     private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
-        dispose();
+        setVisible(false);
     }//GEN-LAST:event_cancelButton1ActionPerformed
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
 
-        new ClientHandle(User.bf, User.pw).modify_reserv(User.username, blbl[1], blbl[0], year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", post.getSelection());
-        dispose();
+        res = new ClientHandle(User.bf, User.pw).modify_reserv(User.username, blbl[1], blbl[0], year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", post.getSelection());
+        setVisible(false);
     }//GEN-LAST:event_confirmButton1ActionPerformed
 
     private void hourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourActionPerformed

@@ -10,6 +10,7 @@ import gamehub.view.add.AddGlobal;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import raven.toast.Notifications;
 
 /**
  *
@@ -116,6 +117,15 @@ public class reserv extends javax.swing.JFrame {
 
         AddGlobal addReserv = new AddGlobal(null, true);
         addReserv.setVisible(true);
+        String res = addReserv.getRes();
+        addReserv.dispose();
+        if (res == null) {
+
+        } else if (res.equals("-1")) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+        } else {
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -139,22 +149,13 @@ public class reserv extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                try {
-                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, date, post);
-                    if (!tt.equals("-1")) {
-                        JOptionPane.showMessageDialog(this,
-                                "Reservation deleted successfully!",
-                                "Success",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        // Delete failed
-                        JOptionPane.showMessageDialog(this,
-                                "Failed to delete reservation.",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (IOException ex) {
-                    System.getLogger(reserv.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, date, post);
+                if (tt == null) {
+
+                } else if (tt.equals("-1")) {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la modification");
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
                 }
             }
         } else {

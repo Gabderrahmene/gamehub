@@ -17,6 +17,7 @@ public class addHebdo extends javax.swing.JDialog {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(addHebdo.class.getName());
     private String date;
     private String hour;
+    public String res;
 
     /**
      * Creates new form add_
@@ -30,6 +31,17 @@ public class addHebdo extends javax.swing.JDialog {
         confirmButton1.setEnabled(false);
         post.removeAllItems();
         posts();
+        res = null;
+    }
+
+    public String getRes() {
+        if (res == null) {
+            return null;
+        } else if (res.equals("-1")) {
+            return "-1";
+        } else {
+            return date + "-" + hour + "-" + post.getSelection();
+        }
     }
 
     public void posts() {
@@ -145,13 +157,13 @@ public class addHebdo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
-        dispose();
+        setVisible(false);
     }//GEN-LAST:event_cancelButton1ActionPerformed
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
 
-        new ClientHandle(User.bf, User.pw).create_reserv(User.username, date + " " + hour + ":00", post.getSelection());
-        dispose();
+        res = new ClientHandle(User.bf, User.pw).create_reserv(User.username, date + " " + hour + ":00", post.getSelection());
+        setVisible(false);
     }//GEN-LAST:event_confirmButton1ActionPerformed
 
     private void postActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postActionPerformed

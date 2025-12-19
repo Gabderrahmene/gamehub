@@ -43,30 +43,45 @@ public class ClientHandle {
         return "-1";
     }
 
-    public void create_reserv(String id_user, String date, String post) {
-        pw.println("create_reserv");
-        pw.println(id_user);
-        pw.println(date);
-        pw.println(post);
-
+    public String create_reserv(String id_user, String date, String post) {
+        try {
+            pw.println("create_reserv");
+            pw.println(id_user);
+            pw.println(date);
+            pw.println(post);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
     }
 
-    public void modify_reserv(String id_user, String odate, String opost, String date, String post) {
-        pw.println("modify_reserv");
-        pw.println(id_user);
-        pw.println(odate);
-        pw.println(opost);
-        pw.println(date);
-        pw.println(post);
-
+    public String modify_reserv(String id_user, String odate, String opost, String date, String post) {
+        try {
+            pw.println("modify_reserv");
+            pw.println(id_user);
+            pw.println(odate);
+            pw.println(opost);
+            pw.println(date);
+            pw.println(post);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
     }
 
-    public String del_reserv(String id_user, String date, String post) throws IOException {
-        pw.println("del_reserv");
-        pw.println(id_user);
-        pw.println(date);
-        pw.println(post);
-        return bf.readLine();
+    public String del_reserv(String id_user, String date, String post) {
+        try {
+            pw.println("del_reserv");
+            pw.println(id_user);
+            pw.println(date);
+            pw.println(post);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
     }
 
     public String get_reserv(String username) {
