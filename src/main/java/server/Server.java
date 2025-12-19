@@ -97,6 +97,27 @@ public class Server extends Thread {
                         String text = handle.get_posts(date);
                         pw.println(text);
                     }
+                                        case "del_reserv_admin" -> {
+                        String id = bf.readLine();
+                        String date = bf.readLine();
+                        String post = bf.readLine();
+                        String text = handle.del_reserv(id, date, post);
+                        pw.println(text);
+                    }
+                    case "get_reserv_admin" -> {
+                        String reservs = handle.get_reserv_admin();
+                        pw.println(reservs);
+                    }
+                    case "get_reserv_wek_admin" -> {
+                        String date = bf.readLine();
+                        String reservs = handle.get_reserv_wek_admin( date);
+                        pw.println(reservs);
+                    }   
+                    case "get_reserv_mon_admin" -> {
+                        String date = bf.readLine();
+                        String reservs = handle.get_reserv_mon_admin( date);
+                        pw.println(reservs);
+                    }
 
                     default ->
                         pw.println("-1");

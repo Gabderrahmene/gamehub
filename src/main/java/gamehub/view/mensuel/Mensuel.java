@@ -16,7 +16,7 @@ import javax.swing.JLabel;
  * @author abdou
  */
 public class Mensuel extends javax.swing.JPanel {
-
+    
     private int month;
     private int year;
 
@@ -34,8 +34,12 @@ public class Mensuel extends javax.swing.JPanel {
         calendar.set(Calendar.DATE, 1);
         int startDat = calendar.get(Calendar.DAY_OF_WEEK);
         calendar.add(Calendar.DATE, -startDat);
-        String tt = new ClientHandle(User.bf, User.pw).get_reserv_mon(User.username, calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1)+ "-" + calendar.get(Calendar.DATE));
-        System.out.println(calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DATE));
+        String tt;
+        if(User.username.equals("admin")){
+          tt = new ClientHandle(User.bf, User.pw).get_reserv_mon_admin(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1)+ "-" + calendar.get(Calendar.DATE));   
+        }else{
+           tt = new ClientHandle(User.bf, User.pw).get_reserv_mon(User.username, calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1)+ "-" + calendar.get(Calendar.DATE));
+        }
         String[] t = tt.split("/");
         for (Component com : getComponents()) {
             if (com.getClass().getSimpleName().equals("JourCellule")) {
@@ -52,7 +56,12 @@ public class Mensuel extends javax.swing.JPanel {
                     date = date.split(" ")[0];
                     String[] comp = date.split("-");
                     if (Integer.parseInt(comp[2]) == (calendar.get(Calendar.DATE)) &&Integer.parseInt(comp[1]) == (calendar.get(Calendar.MONTH)+1) && Integer.parseInt(comp[0]) == (calendar.get(Calendar.YEAR))) {
+                        if(User.username.equals("admin")){
+                           ce.addEvent(post+"-"+i.split(",")[2]); 
+                        }else{
                         ce.addEvent(post);
+                    }
+                        
                     }
 
                 }

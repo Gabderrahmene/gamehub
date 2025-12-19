@@ -94,7 +94,15 @@ public class ClientHandle {
         }
         return "-1";
     }
-
+    public String get_reserv_admin() {
+        try {
+            pw.println("get_reserv_admin");
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
+    }
     public String get_reserv_wek(String username, String date) {
         try {
             pw.println("get_reserv_wek");
@@ -110,6 +118,26 @@ public class ClientHandle {
         try {
             pw.println("get_reserv_mon");
             pw.println(username);
+            pw.println(date);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
+    }
+    public String get_reserv_wek_admin( String date) {
+        try {
+            pw.println("get_reserv_wek_admin");
+            pw.println(date);
+            return bf.readLine();
+        } catch (IOException ex) {
+            System.getLogger(ClientHandle.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return "-1";
+    }
+    public String get_reserv_mon_admin( String date) {
+        try {
+            pw.println("get_reserv_mon_admin");
             pw.println(date);
             return bf.readLine();
         } catch (IOException ex) {

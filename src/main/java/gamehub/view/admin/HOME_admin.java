@@ -4,12 +4,8 @@
  */
 package gamehub.view.admin;
 
-import gamehub.view.main.*;
-import gamehub.control.ClientHandle;
-import gamehub.models.User;
 import gamehub.view.mensuel.MFrame;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,8 +35,8 @@ public class HOME_admin extends javax.swing.JFrame {
         initComponents();
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
-        hebdo_ hebdo = new hebdo_admin();
-        reserv reser = new reserv_admin();
+        hebdo_admin hebdo = new hebdo_admin();
+        reserv_admin reser = new reserv_admin();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();
         JPanel reserv = (JPanel) reser.getContentPane();
 
