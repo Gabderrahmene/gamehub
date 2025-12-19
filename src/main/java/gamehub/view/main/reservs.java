@@ -12,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import raven.toast.Notifications;
 
 /**
@@ -20,45 +23,33 @@ import raven.toast.Notifications;
  * @author abdel
  */
 public class reservs extends JLabel implements ActionListener {
-
     private JTable agendaTable;
     private DefaultTableModel tableModel;
+    private JTextField searchField;
+    private TableRowSorter<DefaultTableModel> rowSorter;
 
     public reservs() {
-        // Use BorderLayout for the panel to contain the JScrollPane
-        setLayout(new BorderLayout());
+       setLayout(new BorderLayout());
 
-        // 1. Define the Column Names
-        String[] columnNames = {"POST", "DATE", "USER"};
+    String[] columnNames = {"POST", "DATE", "USER"};
+    tableModel = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) { return false; }
+    };
 
-        // 2. Create the Table Model
-        // This model holds the data and column structure.
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            // Optional: Override isCellEditable to prevent users from editing data directly
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+    agendaTable = new JTable(tableModel);
+    
+    rowSorter = new TableRowSorter<>(tableModel);
+    agendaTable.setRowSorter(rowSorter);
 
-        // 3. Create the JTable using the model
-        agendaTable = new JTable(tableModel);
+    agendaTable.setFillsViewportHeight(true);
+    agendaTable.setRowHeight(25);
 
-        // Optional: Set table appearance to better match the screenshot
-        agendaTable.setFillsViewportHeight(true); // Makes the table fill the height
-        agendaTable.setRowHeight(25); // Set a pleasant row height
-        agendaTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                reservsMousePressed(evt);
-            }
-        });
-        // 4. Wrap the JTable in a JScrollPane
-        // The JScrollPane ensures the table headers are visible and scrolling works.
-        JScrollPane scrollPane = new JScrollPane(agendaTable);
-
-        // 5. Add the scroll pane to the current panel
-        add(scrollPane, BorderLayout.CENTER);
+    add(createSearchPanel(), BorderLayout.NORTH);
+    
+    JScrollPane scrollPane = new JScrollPane(agendaTable);
+    add(scrollPane, BorderLayout.CENTER);
+        add(createSearchPanel(), BorderLayout.NORTH);
 
         String tt = new ClientHandle(User.bf, User.pw).get_reserv(User.username);
         String[] reservations = tt.split("/");
@@ -77,14 +68,18 @@ public class reservs extends JLabel implements ActionListener {
 
         }
     }
-
+    
     public void addPostRow(String titre, String date, String responsable) {
         Object[] rowData = {titre, date, responsable};
         tableModel.addRow(rowData);
     }
-    public void supPostRow() {
-        tableModel.removeRow(agendaTable.getSelectedRow());
+public void supPostRow() {
+    int viewRow = agendaTable.getSelectedRow();
+    if (viewRow != -1) {
+        int modelRow = agendaTable.convertRowIndexToModel(viewRow);
+        tableModel.removeRow(modelRow);
     }
+}
     private void reservsMousePressed(java.awt.event.MouseEvent evt) {
         if (SwingUtilities.isRightMouseButton(evt)) {
             int row = agendaTable.rowAtPoint(evt.getPoint());
@@ -104,7 +99,31 @@ public class reservs extends JLabel implements ActionListener {
             }
         }
     }
+private JPanel createSearchPanel() {
+    JPanel panel = new JPanel(new BorderLayout(10, 10));
+    panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    
+    searchField = new JTextField();
+    panel.add(new JLabel("Search: "), BorderLayout.WEST);
+    panel.add(searchField, BorderLayout.CENTER);
 
+    // Add the Live Listener
+    searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        public void insertUpdate(javax.swing.event.DocumentEvent e) { filter(); }
+        public void removeUpdate(javax.swing.event.DocumentEvent e) { filter(); }
+        public void changedUpdate(javax.swing.event.DocumentEvent e) { filter(); }
+
+        private void filter() {
+            String text = searchField.getText().trim();
+            if (text.isEmpty()) {
+                rowSorter.setRowFilter(null);
+            } else {
+                rowSorter.setRowFilter(RowFilter.regexFilter("^(?i)" + java.util.regex.Pattern.quote(text)));
+            }
+        }
+    });
+    return panel;
+}
     public int getSelectedRowIndex() {
         return agendaTable.getSelectedRow();
 
