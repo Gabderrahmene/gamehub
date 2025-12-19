@@ -10,6 +10,10 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import raven.toast.Notifications;
 
 /**
  *
@@ -25,7 +29,13 @@ public class register extends javax.swing.JFrame {
      * Creates new form login
      */
     public register(BufferedReader bf, PrintWriter pw) {
+                try {
+            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+        } catch (UnsupportedLookAndFeelException ex) {
+            JOptionPane.showMessageDialog(null, ":(", "erreur de chargement du theme", JOptionPane.INFORMATION_MESSAGE);
+        }
         initComponents();
+        Notifications.getInstance().setJFrame(this);
         Dimension screenSize, frameSize;
         int x, y;
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -256,6 +266,11 @@ public class register extends javax.swing.JFrame {
 
             String id = new ClientHandle(this.bf, this.pw).register(username.getText(), password.getText());
             System.out.println(id);
+            if(id.equals("0")){
+              Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "registered :)"); 
+            }else{
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "oops :("); 
+            }
         } else {
             if (username.getText().isBlank()) {
                 warning1.setVisible(true);

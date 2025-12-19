@@ -7,6 +7,7 @@ package gamehub.view.admin;
 import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.models.client;
 import gamehub.view.add.modify;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -42,14 +43,14 @@ public class reservs_admin extends JLabel implements ActionListener {
     agendaTable = new JTable(tableModel);
     
     agendaTable.getTableHeader().setBackground(purple_dark);
-    agendaTable.getTableHeader().setForeground(Color.WHITE); // White text on purple background
+    agendaTable.getTableHeader().setForeground(Color.WHITE); 
     agendaTable.getTableHeader().setFont(agendaTable.getTableHeader().getFont().deriveFont(Font.BOLD));
     
     // Customize table rows
     agendaTable.setBackground(dark_blue);
-    agendaTable.setForeground(Color.WHITE); // White text on blue background
-    agendaTable.setGridColor(Color.GRAY); // Grid lines color
-    agendaTable.setSelectionBackground(purple_dark); // Selection color
+    agendaTable.setForeground(Color.WHITE);
+    agendaTable.setGridColor(Color.GRAY); 
+    agendaTable.setSelectionBackground(purple_dark); 
     agendaTable.setSelectionForeground(Color.WHITE);
     
     agendaTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -82,14 +83,14 @@ public class reservs_admin extends JLabel implements ActionListener {
                 String[] dateTimeParts = dateHeure.split(" ");
                 String date = dateTimeParts[0];
                 String heure = dateTimeParts[1];
-                
-                addPostRow(post, dateHeure, username);
+                String id = parts[3].trim();
+                addPostRow(post, dateHeure, new client(id,username));
             }
 
         }
     }
     
-    public void addPostRow(String titre, String date, String responsable) {
+    public void addPostRow(String titre, String date, client responsable) {
         Object[] rowData = {titre, date, responsable};
         tableModel.addRow(rowData);
     }
@@ -154,9 +155,17 @@ private JPanel createSearchPanel() {
         int selectedRow = agendaTable.getSelectedRow();
         if (selectedRow != -1) {
             String post = (String) tableModel.getValueAt(selectedRow, 0);
+            String date = (String) tableModel.getValueAt(selectedRow, 1);;
+            return new String[]{post, date};
+        }
+        return null;
+    }
+     public client getSelectedRowValues1() {
+        int selectedRow = agendaTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String post = (String) tableModel.getValueAt(selectedRow, 0);
             String date = (String) tableModel.getValueAt(selectedRow, 1);
-            String user = (String) tableModel.getValueAt(selectedRow, 2);
-            return new String[]{post, date, user};
+            return (client) tableModel.getValueAt(selectedRow, 2);
         }
         return null;
     }
@@ -175,7 +184,7 @@ private JPanel createSearchPanel() {
                         JOptionPane.YES_NO_OPTION);
 
                 if (confirm == JOptionPane.YES_OPTION) {
-                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, inf[1], inf[0]);
+                    String tt = new ClientHandle(User.bf, User.pw).del_reserv(getSelectedRowValues1().getId(), inf[1], inf[0]);
                     if (tt == null) {
 
                     } else if (tt.equals("-1")) {
@@ -187,8 +196,8 @@ private JPanel createSearchPanel() {
                 }
                 break;
             case "modify":
-
-                modify addReserv = new modify(null, true, inf);
+                String T[]={inf[0], inf[1],getSelectedRowValues1().getId()};
+                modify_admin addReserv = new modify_admin(null, true, T);
                 addReserv.setVisible(true);
                 String res = addReserv.getRes();
                 addReserv.dispose();
@@ -200,7 +209,7 @@ private JPanel createSearchPanel() {
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "modification reussis");
                     supPostRow();
                     String[] nr= res.split(",");
-                    addPostRow(nr[1],nr[0],"vous");
+                    addPostRow(nr[1],nr[0],getSelectedRowValues1());
                     
                 }
 

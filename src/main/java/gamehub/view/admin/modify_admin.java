@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package gamehub.view.add;
+package gamehub.view.admin;
 
+import gamehub.view.add.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import java.awt.Dimension;
@@ -14,16 +15,18 @@ import java.io.IOException;
  *
  * @author abdou
  */
-public class AddGlobal extends javax.swing.JDialog {
+public class modify_admin extends javax.swing.JDialog {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddGlobal.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(modify_admin.class.getName());
     public String res;
-
     /**
      * Creates new form add_
      */
-    public AddGlobal(java.awt.Frame parent, boolean modal) {
+    private String blbl[];
+
+    public modify_admin(java.awt.Frame parent, boolean modal, String blbl[]) {
         super(parent, modal);
+        this.blbl = blbl;
         initComponents();
                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
            Dimension frameSize = getSize();
@@ -33,8 +36,8 @@ public class AddGlobal extends javax.swing.JDialog {
         warning1.setVisible(false);
         confirmButton1.setEnabled(false);
         post.removeAllItems();
-        res = null;
         posts();
+        res = null;
     }
 
     public String getRes() {
@@ -62,7 +65,7 @@ public class AddGlobal extends javax.swing.JDialog {
                 post.addPost(i);
             }
         } catch (IOException ex) {
-            System.getLogger(AddGlobal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(modify_admin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
 
@@ -237,7 +240,7 @@ public class AddGlobal extends javax.swing.JDialog {
 
     private void confirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButton1ActionPerformed
 
-        res = new ClientHandle(User.bf, User.pw).create_reserv(User.username, year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", post.getSelection());
+        res = new ClientHandle(User.bf, User.pw).modify_reserv(blbl[2], blbl[1], blbl[0], year.getSelection() + "-" + month.getSelection() + "-" + day.getSelection() + " " + hour.getSelection() + ":00", post.getSelection());
         setVisible(false);
     }//GEN-LAST:event_confirmButton1ActionPerformed
 

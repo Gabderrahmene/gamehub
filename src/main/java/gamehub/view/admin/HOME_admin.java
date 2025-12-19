@@ -5,6 +5,8 @@
 package gamehub.view.admin;
 
 import gamehub.view.mensuel.MFrame;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import javax.swing.JOptionPane;
@@ -33,6 +35,11 @@ public class HOME_admin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ":(", "erreur de chargement du theme", JOptionPane.INFORMATION_MESSAGE);
         }
         initComponents();
+                   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+           Dimension frameSize = getSize();
+         int x = (screenSize.width - frameSize.width) / 2;
+            int y = (screenSize.height - frameSize.height) / 2;
+            setLocation(x, y);
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
         hebdo_admin hebdo = new hebdo_admin();
@@ -43,7 +50,7 @@ public class HOME_admin extends javax.swing.JFrame {
         tab.addTab("hebdo", hebdo_);
         tab.addTab("resv", reserv);
         MFrame mframeWindow = new MFrame();
-        tab.addTab("frame", mframeWindow.getContentPane());
+        tab.addTab("monsuel", mframeWindow.getContentPane());
 
     }
 

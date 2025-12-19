@@ -7,6 +7,8 @@ package gamehub.view.main;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
 import gamehub.view.mensuel.MFrame;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,20 +32,26 @@ public class HOME extends javax.swing.JFrame {
      * Creates new form reservation
      */
     public HOME() {
+        
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
         } catch (UnsupportedLookAndFeelException ex) {
             JOptionPane.showMessageDialog(null, ":(", "erreur de chargement du theme", JOptionPane.INFORMATION_MESSAGE);
         }
         initComponents();
+           Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+           Dimension frameSize = getSize();
+         int x = (screenSize.width - frameSize.width) / 2;
+            int y = (screenSize.height - frameSize.height) / 2;
+            setLocation(x, y);
+        Notifications.getInstance().setJFrame(this);
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "eat play sleep repeat !");
         tab.setBackground(new java.awt.Color(0, 0, 51)); 
     
 
     tab.putClientProperty("JTabbedPane.contentAreaColor", new java.awt.Color(0, 0, 51));
 
     tab.setOpaque(true);
-        Notifications.getInstance().setJFrame(this);
-        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "bilal ;D");
         hebdo_ hebdo = new hebdo_();
         reserv reser = new reserv();
         JPanel hebdo_ = (JPanel) hebdo.getContentPane();
@@ -52,7 +60,7 @@ public class HOME extends javax.swing.JFrame {
         tab.addTab("hebdo", hebdo_);
         tab.addTab("resv", reserv);
         MFrame mframeWindow = new MFrame();
-        tab.addTab("frame", mframeWindow.getContentPane());
+        tab.addTab("monsuel", mframeWindow.getContentPane());
         hebdo_.setOpaque(false);
 reserv.setOpaque(false);
 

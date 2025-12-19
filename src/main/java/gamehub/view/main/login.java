@@ -264,10 +264,9 @@ public class login extends javax.swing.JFrame {
                 PrintWriter pw = User.pw;
                 if(id.equals("admin")){
                   new HOME_admin().setVisible(true); 
-                  System.out.print(id);
+                  dispose();
                 }else{
                 new HOME().setVisible(true);
-                System.out.print(id);
                 dispose();
                 }
             }

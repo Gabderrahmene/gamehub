@@ -132,6 +132,7 @@ public class Mensuel extends javax.swing.JPanel {
         jourCellule41 = new gamehub.view.mensuel.JourCellule();
         jourCellule42 = new gamehub.view.mensuel.JourCellule();
 
+        setBackground(new java.awt.Color(51, 0, 102));
         setLayout(new java.awt.GridLayout(7, 7, 5, 1));
 
         jour1.setText("Dim");

@@ -6,6 +6,8 @@ package gamehub.view.add;
 
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 
 /**
@@ -25,6 +27,11 @@ public class addHebdo extends javax.swing.JDialog {
     public addHebdo(java.awt.Frame parent, boolean modal, String date, String hour) {
         super(parent, modal);
         initComponents();
+                   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+           Dimension frameSize = getSize();
+         int x = (screenSize.width - frameSize.width) / 2;
+            int y = (screenSize.height - frameSize.height) / 2;
+            setLocation(x, y);
         this.date = date;
         this.hour = hour;
         warning1.setVisible(false);

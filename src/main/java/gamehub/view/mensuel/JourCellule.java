@@ -23,8 +23,9 @@ public class JourCellule extends JScrollPane {
     private Date date;
     private final JLabel label;
     private final JPanel panel;
-
+    
     public JourCellule() {
+        Color blue= new Color (0,0,102);
         this.label = new JLabel("", SwingConstants.CENTER);
         this.panel = new JPanel();
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
@@ -36,8 +37,9 @@ public class JourCellule extends JScrollPane {
         this.setViewportBorder(null);
         this.setColumnHeaderView(label);
         panel.setBackground(Color.BLACK);
-        label.setBackground(Color.BLACK);
-        label.setOpaque(false);
+        
+        label.setBackground(blue);
+        label.setOpaque(true);
         setViewportView(panel);
 
     }
@@ -66,9 +68,9 @@ public class JourCellule extends JScrollPane {
 
     public void currentMonth(boolean act) {
         if (act) {
-            label.setForeground(new Color(65, 65, 63));
-        } else {
             label.setForeground(new Color(165, 165, 165));
+        } else {
+            label.setForeground(new Color(65, 65, 63));
         }
     }
 

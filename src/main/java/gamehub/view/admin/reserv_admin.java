@@ -7,6 +7,7 @@ package gamehub.view.admin;
 import gamehub.view.main.*;
 import gamehub.control.ClientHandle;
 import gamehub.models.User;
+import gamehub.models.client;
 import gamehub.view.add.AddGlobal;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,7 +38,7 @@ public class reserv_admin extends javax.swing.JFrame {
 
     private void openAgendaWindow() {
         JFrame agendaFrame = new JFrame("Agenda CollaborativeT - List of Events");
-        agendaFrame.setContentPane(new reservs_admin()); // or however you're adding it
+        agendaFrame.setContentPane(new reservs_admin()); 
 
         agendaFrame.pack();  
 
@@ -52,18 +53,11 @@ public class reserv_admin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         res = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setBackground(new java.awt.Color(0, 0, 102));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("CREATE");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(102, 0, 102));
         jButton2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
@@ -79,12 +73,6 @@ public class reserv_admin extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
@@ -93,6 +81,10 @@ public class reserv_admin extends javax.swing.JFrame {
                         .addGap(325, 325, 325)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(36, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,32 +93,13 @@ public class reserv_admin extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
                 .addComponent(res, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        AddGlobal addReserv = new AddGlobal(null, true);
-        addReserv.setVisible(true);
-        String res = addReserv.getRes();
-        addReserv.dispose();
-        if (res == null) {
-
-        } else if (res.equals("-1")) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "erreur pendant la creation");
-        } else {
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "creation reussis");
-            String[] nr= res.split(",");
-            tableViewComponent.addPostRow(nr[1],nr[0],"vous");
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String[] selectedValues = tableViewComponent.getSelectedRowValues();
@@ -134,13 +107,12 @@ public class reserv_admin extends javax.swing.JFrame {
         if (selectedValues != null) {
             String post = selectedValues[0];
             String date = selectedValues[1];
-            String user = selectedValues[2];
+            client user = tableViewComponent.getSelectedRowValues1();
 
             System.out.println("Selected user: " + user);
             System.out.println("Selected dat: " + date);
             System.out.println("Selected psot: " + post);
 
-            // Example: Show confirmation and delete
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Delete this reservation?\n\n"
                     + "POST: " + post + "\n"
@@ -149,7 +121,7 @@ public class reserv_admin extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                String tt = new ClientHandle(User.bf, User.pw).del_reserv(User.username, date, post);
+                String tt = new ClientHandle(User.bf, User.pw).del_reserv(user.getId(), date, post);
                 if (tt == null) {
 
                 } else if (tt.equals("-1")) {
@@ -168,7 +140,6 @@ public class reserv_admin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane res;
